@@ -7,9 +7,9 @@
 </script>
 <body>
 
-<form action ="<?php uploadPDF(14,array('file.pdf')); ?>" method="post" enctype="multipart/form-data">
+<form action ="<?php uploadPDF(); ?>" method="post" enctype="multipart/form-data">
     Scegli i file da caricare:
-    <input type="file" name="fileToUpload" id="fileToUpload">
+    <input type="file" name="upload[]" multiple="multiple">
     <input type="submit" value="Upload Image" name="submit">
 </form>
 

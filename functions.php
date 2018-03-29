@@ -4,6 +4,10 @@ define('servername', 'localhost');
 define('username', 'root');
 define('password', 'root');
 define('dbname', 'AIC');
+/* PER DEBUG
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
+*/
 
   function creaRigaFatt() {
     // Create connection
@@ -130,7 +134,7 @@ define('dbname', 'AIC');
 
   }
 
-  function uploadPDF($ditta, $files) {
+  function uploadPDF() {
     if ($_POST["submit"]) {
     // Create connection
     $conn = new mysqli(servername, username, password, dbname);
@@ -138,16 +142,23 @@ define('dbname', 'AIC');
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    // Inserisce una nuova riga per fattura nel DB
+
+    //filtra i file prelevati
+    $files = array_filter($_FILES['upload']['tmp_name']);
+
     foreach ($files as $file) {
+      // Inserisce una nuova riga per fattura nel DB
       $sql = "INSERT INTO fatture (ditta, stato)
-              VALUES ($ditta, \"Nuovo\")";
+              VALUES (14, \"Nuovo\")";
       $result = $conn->query($sql);
       $result = $conn->query("SELECT LAST_INSERT_ID()"); //ottiene l'ID dell'ultima fattura
       if ($result->num_rows > 0) {
           // output data of each row
           while($row = $result->fetch_assoc()) {
-            copy($file, "documents/$ditta/".$row["LAST_INSERT_ID()"].".pdf");
+            // inserisce il file nella cartella corretta
+            if ($file) {
+              move_uploaded_file($file, "documents/14/".$row["LAST_INSERT_ID()"].".pdf");
+            }
           }
       } else {
         print("errore");
