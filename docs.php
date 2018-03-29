@@ -39,7 +39,7 @@
     <tr>
       <th>Ditta</th>
       <th>Data caricamento</th>
-      <th>Tipo doc.</th>
+      <th>Causale</th>
       <th>Data documento</th>
       <th>Numero fatt.</th>
       <th>Protocollo</th>
