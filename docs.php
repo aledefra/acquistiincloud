@@ -26,7 +26,7 @@
     <a class="active"><strong>Acquisti </strong>in <strong>Cloud</strong></a>
     <a class="reg-right" href="#">Registra</a>
     <a class="reg-right" href="#">Scarica fatture da FIC</a>
-    <a class="reg-right" href="#">Carica fatture</a>
+    <a class="reg-right" href="uploadPDF.php">Carica fatture</a>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 

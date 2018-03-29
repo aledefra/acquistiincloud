@@ -13,11 +13,10 @@ define('dbname', 'AIC');
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $sql = "SELECT fatture.idFatt, fatture.dataCaric, fatture.causale, fatture.dataFatt, fatture.nFatt, fatture.nProtocollo, fatture.totFatt,
-    fatture.stato,
-	  controparti.nomeForn, ditte.nomeDitta
-    FROM fatture, ditte, controparti
-    WHERE fatture.ditta = ditte.codiceDitta AND fatture.controparte=controparti.idControp
+    $sql = "SELECT fatture.idFatt, fatture.ditta, fatture.controparte, fatture.dataCaric, fatture.causale, fatture.dataFatt, fatture.nFatt, fatture.nProtocollo, fatture.totFatt, fatture.stato, ditte.nomeDitta, controparti.nomeForn
+    FROM fatture
+    JOIN ditte on fatture.ditta = ditte.codiceDitta
+    LEFT JOIN controparti on fatture.controparte = controparti.idControp
     ORDER BY fatture.idFatt DESC";
     $result = $conn->query($sql);
 
@@ -107,7 +106,6 @@ define('dbname', 'AIC');
     $conn->close();
   }
 
-
   function loadPDF($docID) {
     // Create connection
     $conn = new mysqli(servername, username, password, dbname);
@@ -130,6 +128,33 @@ define('dbname', 'AIC');
       print("nessun risultato");
     }
 
+  }
+
+  function uploadPDF($ditta, $files) {
+    if ($_POST["submit"]) {
+    // Create connection
+    $conn = new mysqli(servername, username, password, dbname);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    // Inserisce una nuova riga per fattura nel DB
+    foreach ($files as $file) {
+      $sql = "INSERT INTO fatture (ditta, stato)
+              VALUES ($ditta, \"Nuovo\")";
+      $result = $conn->query($sql);
+      $result = $conn->query("SELECT LAST_INSERT_ID()"); //ottiene l'ID dell'ultima fattura
+      if ($result->num_rows > 0) {
+          // output data of each row
+          while($row = $result->fetch_assoc()) {
+            copy($file, "documents/$ditta/".$row["LAST_INSERT_ID()"].".pdf");
+          }
+      } else {
+        print("errore");
+      }
+    }
+    header("location: /acquistiincloud/docs.php");
+  }
   }
 
 ?>
