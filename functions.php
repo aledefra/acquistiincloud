@@ -149,7 +149,7 @@ error_reporting(E_ALL);
     foreach ($files as $file) {
       // Inserisce una nuova riga per fattura nel DB
       $sql = "INSERT INTO fatture (ditta, stato)
-              VALUES (14, \"Nuovo\")";
+              VALUES (".$_POST["ditta"].", \"Nuovo\")";
       $result = $conn->query($sql);
       $result = $conn->query("SELECT LAST_INSERT_ID()"); //ottiene l'ID dell'ultima fattura
       if ($result->num_rows > 0) {
@@ -157,7 +157,7 @@ error_reporting(E_ALL);
           while($row = $result->fetch_assoc()) {
             // inserisce il file nella cartella corretta
             if ($file) {
-              move_uploaded_file($file, "documents/14/".$row["LAST_INSERT_ID()"].".pdf");
+              move_uploaded_file($file, "documents/".$_POST["ditta"]."/".$row["LAST_INSERT_ID()"].".pdf");
             }
           }
       } else {
@@ -168,4 +168,28 @@ error_reporting(E_ALL);
   }
   }
 
+  function retrieveDitteForDropdown() {
+    // Create connection
+    $conn = new mysqli(servername, username, password, dbname);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $sql = "SELECT nomeDitta, codiceDitta
+            FROM ditte";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+          // inserisce il file nella cartella corretta
+          print("<option value=\"".$row["codiceDitta"]."\">".$row["nomeDitta"]."</option>");
+        }
+    } else {
+      print("errore");
+    }
+
+  }
+
+
+  
 ?>
