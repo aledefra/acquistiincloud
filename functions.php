@@ -248,7 +248,8 @@ error_reporting(E_ALL);
             JOIN ditte on fatture.ditta = ditte.codiceDitta
             JOIN controparti on fatture.controparte = controparti.idControp
             JOIN ditteSez on fatture.sezionale = ditteSez.idSez
-            WHERE fatture.stato = \"Registrato\"";
+            WHERE fatture.stato = \"Registrato\"
+            ORDER BY dataFatt";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
       $TRAF2000 = "";
@@ -291,11 +292,11 @@ error_reporting(E_ALL);
           $sql = "UPDATE fatture
                   SET nProtocollo = ".$protocollo."
                   WHERE idFatt = ".$row["idFatt"];
-    //      $conn->query($sql); //assegna il protocollo alla fattura
+          $conn->query($sql); //assegna il protocollo alla fattura
           $sql = "UPDATE ditteSez
                   SET ultimoProt = ".$protocollo."
                   WHERE idSez = ".$row["idSez"];
-    //      $conn->query($sql); //aggiorna l'ultimo protocollo del sez.
+          $conn->query($sql); //aggiorna l'ultimo protocollo del sez.
         $TRAF2000 .= right(str_repeat('0',5).$protocollo,5);
         $TRAF2000 .= right(str_repeat('0',2).$row["codSezionale"],2);
         $TRAF2000 .= spaces(72);
@@ -309,6 +310,19 @@ error_reporting(E_ALL);
             $TRAF2000 .= right("00".$row["iva11[$i]"],2);
             $TRAF2000 .= right("00000000000".abs($row["imposta[$i]"] * 100),11);
             $TRAF2000 .= sign($row["imposta[$i]"]);
+          } else {
+            $TRAF2000 .= spaces(31)
+          }
+        }
+        //T O T A L E  F A T T U R A
+        $TRAF2000 .= right("000000000000".abs($row["totFatt"] * 100),12);
+        //C O N T I  C O S T O / R I C A V O 
+        for ($i = 1; $i <= 8; $i++) { //crea una riga per ognuna delle 8 righe di fatture
+          if ($row["conto[$i]"]) {
+            $TRAF2000 .= right("0000000".$row["conto[$i]"],7);
+            $TRAF2000 .= right("000000000000".abs($row["importo_conto[$i]"] * 100),12);
+          } else {
+            $TRAF2000 .= spaces(19)
           }
         }
 
@@ -321,7 +335,10 @@ error_reporting(E_ALL);
         $TRAF2000 .= right(,);    */
 
 
-
+        $sql = "UPDATE fatture
+                SET stato = "Contabilizzato"
+                WHERE idFatt = ".$row["idFatt"];
+        $conn->query($sql); //modifica lo stato della fattura
       }
     } else {
       print("errore");
