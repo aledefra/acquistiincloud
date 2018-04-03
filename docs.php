@@ -128,9 +128,12 @@
     </tr>
 -->
     <?php
-      creaRigaFatt()
+      creaRigaFatt();
     ?>
 
   </table>
+
+  <?php  registraFatt()  ?>
+
 </body>
 </html>
