@@ -171,7 +171,7 @@ error_reporting(E_ALL);
     } else {
       print("nessun risultato");
     }
-
+    $conn->close();
   }
 
   function uploadPDF() {
@@ -204,6 +204,7 @@ error_reporting(E_ALL);
         print("errore");
       }
     }
+    $conn->close();
     header("location: /acquistiincloud/docs.php");
     }
   }
@@ -227,7 +228,7 @@ error_reporting(E_ALL);
     } else {
       print("errore");
     }
-
+    $conn->close();
   }
 
   function registraFatt() {
@@ -337,52 +338,67 @@ error_reporting(E_ALL);
     $file = fopen("TRAF2000", "w");
     fwrite($file, $TRAF2000);
     fclose($file);
+    $conn->close();
   }
 
   function downloadFromFIC() {
-    $url = "https://api.fattureincloud.it/v1/acquisti/lista";
-     $request = array("api_uid" => "94455", "api_key" => "0e3ac4f6e4db0fc7405cbbd5d8512cf4", "anno" => "2018", "mostra_link_allegato" => "true");
-     $options = array(
-         "http" => array(
-             "header"  => "Content-type: text/json\r\n",
-             "method"  => "POST",
-             "content" => json_encode($request)
-         ),
-     );
-     $context  = stream_context_create($options);
-     $result = json_decode(file_get_contents($url, false, $context), true);
-     if ($result["success"]) {
-
-       // Create connection
-       $conn = new mysqli(servername, username, password, dbname);
-       // Check connection
-       if ($conn->connect_error) {
-           die("Connection failed: " . $conn->connect_error);
-       }
-
-       //filtra i documenti prelevati
-       $fatture = array_filter($result["lista_documenti"]);
-       print_r($fatture[0]);
-
-       foreach ($fatture as $doc) {
-         // Inserisce una nuova riga per fattura nel DB
-         $formatDate = strtotime($doc["data"]);
-         $sqlDate = date("Y-m-d", $formatDate);   /*rende il formato della data normale*/
-         $sql = "INSERT INTO fatture (ditta, stato, dataFatt, totFatt)
-                 VALUES (14, \"Nuovo\", \"$sqlDate\", ".$doc["importo_totale"].")";
-                 print($sql);
-         $result = $conn->query($sql);
-         $result = $conn->query("SELECT LAST_INSERT_ID()"); //ottiene l'ID dell'ultima fattura
-         if ($result->num_rows > 0) {
-             // output data of each row
-             while($row = $result->fetch_assoc()) {
-               // inserisce il file nella cartella corretta
-               copy($doc["link_allegato"], "documents/14/".$row["LAST_INSERT_ID()"].".pdf");
+    if (isset($_POST['submit'])) {
+    // Create connection
+    $conn = new mysqli(servername, username, password, dbname);
+    // Check connection
+    if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+    }
+    $sql = "SELECT * FROM ditte WHERE codiceDitta = ".$_POST["ditta"];
+    $resultSQL = $conn->query($sql);
+    if ($resultSQL->num_rows > 0) {
+      // output data of each row
+      while($row = $resultSQL->fetch_assoc()) {
+        if ($row["apiUid"]) {
+          $url = "https://api.fattureincloud.it/v1/acquisti/lista";
+           $request = array("api_uid" => $row["apiUid"], "api_key" => $row["apiKey"], "anno" => "2018", "mostra_link_allegato" => "true");
+           $options = array(
+               "http" => array(
+                   "header"  => "Content-type: text/json\r\n",
+                   "method"  => "POST",
+                   "content" => json_encode($request)
+               ),
+           );
+           $context  = stream_context_create($options);
+           $resultJSON = json_decode(file_get_contents($url, false, $context), true);
+           print($resultJSON);
+           if ($resultJSON["success"]) {
+             //filtra i documenti prelevati
+             $fatture = array_filter($resultJSON["lista_documenti"]);
+             foreach ($fatture as $doc) {
+               // Inserisce una nuova riga per fattura nel DB
+               $formatDate = strtotime($doc["data"]);
+               $sqlDate = date("Y-m-d", $formatDate);   /*rende il formato della data normale*/
+               $sql = "INSERT INTO fatture (ditta, stato, dataFatt, totFatt, idFIC)
+                       SELECT * FROM (SELECT ".$_POST["ditta"].", \"Nuovo\", \"$sqlDate\", ".$doc["importo_totale"].", ".$doc["id"].") AS tmp
+                       WHERE NOT EXISTS (
+                         SELECT idFIC FROM fatture WHERE idFIC = ".$doc["id"]."
+                       )";
+               $result = $conn->query($sql);
+               $result = $conn->query("SELECT LAST_INSERT_ID()"); //ottiene l'ID dell'ultima fattura
+               if ($result->num_rows > 0) {
+                   // output data of each row
+                   while($row = $result->fetch_assoc()) {
+                     // inserisce il file nella cartella corretta
+                     copy($doc["link_allegato"], "documents/".$_POST["ditta"]."/".$row["LAST_INSERT_ID()"].".pdf");
+                   }
+               } else {
+                 print("errore");
+               }
              }
-         } else {
-           print("errore");
-         }
-       }
-     }
+           }
+           $conn->close();
+        }
+      }
+    } else {
+      print("errore");
+    }
+     header("location: /acquistiincloud/docs.php");
+   }
   }
 ?>
