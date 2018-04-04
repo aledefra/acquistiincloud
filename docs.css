@@ -51,9 +51,10 @@ table {
 }
 
 th, td {
-    text-align: left;
+    text-align: center;
     padding: 16px;
 }
+
 
 tr:nth-child(even) {
     background-color: #f2f2f2
@@ -74,9 +75,10 @@ tr:nth-child(even) {
      -moz-osx-font-smoothing: grayscale
  }
 
- .fa-check:before {
+.fa-check:before {
      content: "\f00c"
- }
+}
+
 
  i.fa-check, i.fa-times {
      font-size: 1.4em
@@ -99,6 +101,8 @@ tr:nth-child(even) {
  .fa-pencil {
      content: "\f040"
  }
+
+ /* Pulsanti */
 
 .btn {
     display: inline-block;

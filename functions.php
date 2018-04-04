@@ -78,7 +78,7 @@ error_reporting(E_ALL);
           switch ($row["stato"]) {  /* icona di stato */
             case "Da registrare": {
               print("<td class=\"text-center\" style=\"width: 30px;\">");
-                print("<i class=\"red fa fa-times\"></i> Da registrare");
+                print("<i class=\"orange fa fa-circle\"></i> Da registrare");
               print("</td>");
               print("<td style=\"width: 50px;\">");  /* icona modifica/visualizza */
                 print("<div style=\"display: inline-block; min-width: 32px;\">");
@@ -91,7 +91,7 @@ error_reporting(E_ALL);
             }
             case "Nuovo": {
               print("<td class=\"text-center\" style=\"width: 30px;\">");
-                print("<i class=\"red fa fa-times\"></i> Nuovo");
+                print("<i class=\"fa fa-circle\" style=\"color: blue;\"></i> Nuovo");
               print("</td>");
               print("<td style=\"width: 50px;\">");  /* icona modifica/visualizza */
                 print("<div style=\"display: inline-block; min-width: 32px;\">");
@@ -104,12 +104,12 @@ error_reporting(E_ALL);
             }
             case "Registrato": {
               print("<td class=\"text-center\" style=\"width: 30px;\">");
-                print("<i class=\"red fa fa-times\"></i> Registrato");
+                print("<i class=\"green fa fa-check\"></i> Registrato");
               print("</td>");
               print("<td style=\"width: 50px;\">");  /* icona modifica/visualizza */
                 print("<div style=\"display: inline-block; min-width: 32px;\">");
                   print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."\">");
-                    print("<i class=\"ace-icon fa fa-pencil bigger-120\"></i>");
+                    print("<i class=\"ace-icon fa fa-search\"></i>");
                   print("</a>");
                 print("</div>");
               print("</td>");
@@ -122,7 +122,7 @@ error_reporting(E_ALL);
               print("<td style=\"width: 50px;\">");  /* icona modifica/visualizza */
                 print("<div style=\"display: inline-block; min-width: 32px;\">");
                   print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."\">");
-                    print("<i class=\"ace-icon fa fa-pencil bigger-120\"></i>");
+                    print("<i class=\"ace-icon fa fa-search\"></i>");
                   print("</a>");
                 print("</div>");
               print("</td>");
@@ -130,12 +130,12 @@ error_reporting(E_ALL);
             }
             case "Contabilizzato": {
               print("<td class=\"text-center\" style=\"width: 30px;\">");
-                print("<i class=\"red fa fa-times\"></i> Contabilizzato");
+                print("<i class=\"fa fa-archive\"></i> Contabilizzato");
               print("</td>");
               print("<td style=\"width: 50px;\">");  /* icona modifica/visualizza */
                 print("<div style=\"display: inline-block; min-width: 32px;\">");
                   print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."\">");
-                    print("<i class=\"ace-icon fa fa-pencil bigger-120\"></i>");
+                    print("<i class=\"ace-icon fa fa-search\"></i>");
                   print("</a>");
                 print("</div>");
               print("</td>");
@@ -251,8 +251,8 @@ error_reporting(E_ALL);
             WHERE fatture.stato = \"Registrato\"
             ORDER BY dataFatt";
     $result = $conn->query($sql);
+    $TRAF2000 = "";
     if ($result->num_rows > 0) {
-      $TRAF2000 = "";
       // output data of each row
       while($row = $result->fetch_assoc()) {
         $TRAF2000 .= right("00000".$row["ditta"],5);
@@ -311,40 +311,78 @@ error_reporting(E_ALL);
             $TRAF2000 .= right("00000000000".abs($row["imposta[$i]"] * 100),11);
             $TRAF2000 .= sign($row["imposta[$i]"]);
           } else {
-            $TRAF2000 .= spaces(31)
+            $TRAF2000 .= spaces(31);
           }
         }
         //T O T A L E  F A T T U R A
         $TRAF2000 .= right("000000000000".abs($row["totFatt"] * 100),12);
-        //C O N T I  C O S T O / R I C A V O 
+        //C O N T I  C O S T O / R I C A V O
         for ($i = 1; $i <= 8; $i++) { //crea una riga per ognuna delle 8 righe di fatture
           if ($row["conto[$i]"]) {
             $TRAF2000 .= right("0000000".$row["conto[$i]"],7);
             $TRAF2000 .= right("000000000000".abs($row["importo_conto[$i]"] * 100),12);
           } else {
-            $TRAF2000 .= spaces(19)
+            $TRAF2000 .= spaces(19);
           }
         }
-
-
-
-
-
-/*      $TRAF2000 .= ;
-        $TRAF2000 .= left(,);
-        $TRAF2000 .= right(,);    */
-
-
+        $TRAF2000 .= "\n";
         $sql = "UPDATE fatture
-                SET stato = "Contabilizzato"
+                SET stato = \"Contabilizzato\"
                 WHERE idFatt = ".$row["idFatt"];
         $conn->query($sql); //modifica lo stato della fattura
       }
     } else {
-      print("errore");
+      print("Nessun documento da contabilizzare");
     }
     $file = fopen("TRAF2000", "w");
     fwrite($file, $TRAF2000);
     fclose($file);
+  }
+
+  function downloadFromFIC() {
+    $url = "https://api.fattureincloud.it/v1/acquisti/lista";
+     $request = array("api_uid" => "94455", "api_key" => "0e3ac4f6e4db0fc7405cbbd5d8512cf4", "anno" => "2018", "mostra_link_allegato" => "true");
+     $options = array(
+         "http" => array(
+             "header"  => "Content-type: text/json\r\n",
+             "method"  => "POST",
+             "content" => json_encode($request)
+         ),
+     );
+     $context  = stream_context_create($options);
+     $result = json_decode(file_get_contents($url, false, $context), true);
+     if ($result["success"]) {
+
+       // Create connection
+       $conn = new mysqli(servername, username, password, dbname);
+       // Check connection
+       if ($conn->connect_error) {
+           die("Connection failed: " . $conn->connect_error);
+       }
+
+       //filtra i documenti prelevati
+       $fatture = array_filter($result["lista_documenti"]);
+       print_r($fatture[0]);
+
+       foreach ($fatture as $doc) {
+         // Inserisce una nuova riga per fattura nel DB
+         $formatDate = strtotime($doc["data"]);
+         $sqlDate = date("Y-m-d", $formatDate);   /*rende il formato della data normale*/
+         $sql = "INSERT INTO fatture (ditta, stato, dataFatt, totFatt)
+                 VALUES (14, \"Nuovo\", \"$sqlDate\", ".$doc["importo_totale"].")";
+                 print($sql);
+         $result = $conn->query($sql);
+         $result = $conn->query("SELECT LAST_INSERT_ID()"); //ottiene l'ID dell'ultima fattura
+         if ($result->num_rows > 0) {
+             // output data of each row
+             while($row = $result->fetch_assoc()) {
+               // inserisce il file nella cartella corretta
+               copy($doc["link_allegato"], "documents/14/".$row["LAST_INSERT_ID()"].".pdf");
+             }
+         } else {
+           print("errore");
+         }
+       }
+     }
   }
 ?>
