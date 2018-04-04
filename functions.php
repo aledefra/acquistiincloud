@@ -372,33 +372,33 @@ error_reporting(E_ALL);
              $fatture = array_filter($resultJSON["lista_documenti"]);
              foreach ($fatture as $doc) {
                // Inserisce una nuova riga per fattura nel DB
-               $formatDate = strtotime($doc["data"]);
-               $sqlDate = date("Y-m-d", $formatDate);   /*rende il formato della data normale*/
                $sql = "INSERT INTO fatture (ditta, stato, dataFatt, totFatt, idFIC)
-                       SELECT * FROM (SELECT ".$_POST["ditta"].", \"Nuovo\", \"$sqlDate\", ".$doc["importo_totale"].", ".$doc["id"].") AS tmp
+                       SELECT * FROM (SELECT ".$_POST["ditta"].", \"Nuovo\", STR_TO_DATE(\"".$doc['data']."\", \"%d/%m/%Y\"), ".$doc["importo_totale"].", ".$doc["id"].") AS tmp
                        WHERE NOT EXISTS (
                          SELECT idFIC FROM fatture WHERE idFIC = ".$doc["id"]."
                        )";
                $result = $conn->query($sql);
-               $result = $conn->query("SELECT LAST_INSERT_ID()"); //ottiene l'ID dell'ultima fattura
-               if ($result->num_rows > 0) {
-                   // output data of each row
-                   while($row = $result->fetch_assoc()) {
-                     // inserisce il file nella cartella corretta
-                     copy($doc["link_allegato"], "documents/".$_POST["ditta"]."/".$row["LAST_INSERT_ID()"].".pdf");
-                   }
-               } else {
-                 print("errore");
+               if (mysqli_affected_rows($conn)) {
+                 $result = $conn->query("SELECT LAST_INSERT_ID()"); //ottiene l'ID dell'ultima fattura
+                 if ($result->num_rows > 0) {
+                     // output data of each row
+                     while($row = $result->fetch_assoc()) {
+                       // inserisce il file nella cartella corretta
+                       copy($doc["link_allegato"], "documents/".$_POST["ditta"]."/".$row["LAST_INSERT_ID()"].".pdf");
+                     }
+                 } else {
+                   print("errore");
+                 }
                }
              }
            }
-           $conn->close();
         }
       }
     } else {
       print("errore");
     }
-     header("location: /acquistiincloud/docs.php");
+    $conn->close();
+    header("location: /acquistiincloud/docs.php");
    }
   }
 ?>
