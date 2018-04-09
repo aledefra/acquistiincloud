@@ -1,0 +1,37 @@
+/** ******************************************************************
+* chkFiscalCode class to check italian VAT Code and Fiscal Code
+*
+* THIS IS JUST A BRIEF DOCUMENTATION
+* If you need more detailed documentation feel free to ask me :)
+*
+* --------------------------------------------------------------------
+* VAT Code (for company) is something like this:
+*   11111111112
+*   where
+*     1 is the number like 0139182389
+*     2 is the check digit
+*
+* Fiscal Code (for people) is something like this:
+*   AAABBB11C22D333E
+*   where
+*     A    are 3 characters from the surname
+*     B    are 3 characters from the name
+*     1    is the birth year
+*     C    is the birth month
+*     2    is the birth day and the sex
+*     D333 is the birth city code
+*     E    is the check character
+* --------------------------------------------------------------------
+*
+* @copyright  ConsulTes Snc 2003 - info@consultes.it
+* @author     Daniele Testoni    - daniele.testoni@consultes.it
+* ***************************************************************** */
+
+	// EASY USE
+
+	// Copy this section to easy use the class in yours
+	include('./chkFiscalCode_it.php');
+	$code    = new chkFiscalCode_it('put_here_the _code');
+	$type    = $code->type();
+	$error   = $code->check();
+	$details = $code->explode();

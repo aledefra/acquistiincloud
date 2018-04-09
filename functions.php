@@ -166,7 +166,7 @@ error_reporting(E_ALL);
     if ($result->num_rows > 0) {
         // output data of each row
         while($row = $result->fetch_assoc()) {
-          print("<iframe src=\"documents/".$row["codiceDitta"]."/".$row["idFatt"].".pdf\" style=\"width:50%; height:100%\"></iframe>");
+          print("<iframe src=\"documents/".$row["codiceDitta"]."/".$row["idFatt"].".pdf\"class=\"pdfstyle\"></iframe>");
         }
     } else {
       print("nessun risultato");
@@ -233,6 +233,7 @@ error_reporting(E_ALL);
 
   function registraFatt() {
 
+    if (isset($_POST['submit'])) {
     /* I N S E R I R E
     COME VARIABILE PASSATA A FUNZIONE
     R E G I S T R A  F A T T */
@@ -339,6 +340,7 @@ error_reporting(E_ALL);
     fwrite($file, $TRAF2000);
     fclose($file);
     $conn->close();
+    }
   }
 
   function downloadFromFIC() {

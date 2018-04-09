@@ -20,11 +20,11 @@
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-  <link rel="icon" type="image/png" href="/images/favicon.png">
+  <link rel="icon" type="image/png" href="/acquistiincloud/images/favicon.png">
 
   <div class="navbar">
-    <a class="active"><strong>Acquisti </strong>in <strong>Cloud</strong></a>
-    <a class="reg-right" href="#">Registra</a>
+    <a class="active" href="#"><strong>Acquisti </strong>in <strong>Cloud</strong></a>
+    <a class="reg-right" href="registra.php">Registra</a>
     <a class="reg-right" href="downFIC.php">Scarica fatture da FIC</a>
     <a class="reg-right" href="uploadPDF.php">Carica fatture</a>
 
@@ -35,6 +35,14 @@
 </head>
 <body>
 
+<div class="widget-box widget-position">
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+</div>
   <table>
     <tr>
       <th>Ditta</th>
@@ -48,16 +56,12 @@
       <th>Stato</th>
       <th></th>
     </tr>
-
     <?php
       creaRigaFatt();
     ?>
-
+    
   </table>
-
-  <?php
-  //registraFatt()
- ?>
-
+</div>
+</div>
 </body>
 </html>

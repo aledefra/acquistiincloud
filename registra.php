@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html>
+
 <style>
 @import url(docs.css);
 </style>
-<script>
-  <?php
-    include "functions.php";
-  ?>
-</script>
+
 <head>
 
   <title>
-    Scarica da fatture in cloud
+    Registrazione fatture
   </title>
 
   <div class="navbar">
@@ -30,16 +27,20 @@
   <link rel="icon" type="image/png" href="/acquistiincloud/images/favicon.png">
 
 </head>
+<script>
+  <?php
+    include "functions.php";
+  ?>
+</script>
 <body class="topmarg">
 
-
-  <form action ="<?php downloadFromFIC(); ?>" method="post" enctype="multipart/form-data">
+  <form action ="<?php registraFatt(); ?>" method="post" enctype="multipart/form-data">
       Ditta: <select name="ditta">
         <?php
           retrieveDitteForDropdown();
         ?>
       </select><br>
-      <input type="submit" value="Download Fatture" name="submit">
+      <input type="submit" value="Registra Fatture" name="submit">
   </form>
 
 </body>
