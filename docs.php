@@ -36,12 +36,7 @@
 <body>
 
 <div class="widget-box widget-position">
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
+  <br><br><br><br><br><br>
 </div>
   <table>
     <tr>
@@ -59,7 +54,7 @@
     <?php
       creaRigaFatt();
     ?>
-    
+
   </table>
 </div>
 </div>

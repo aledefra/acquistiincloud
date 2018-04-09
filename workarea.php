@@ -75,6 +75,7 @@
       <th>IVA</th>
       <th>IVA11</th>
       <th>Imposta</th>
+      <th></th>
     </tr>
     <tr>
       <td><input name="sottoconto[1]" id="sottoconto[1]" type="text" size="10"></td>
@@ -82,6 +83,13 @@
       <td><input name="iva[1]" id="iva[1]" type="text" size="5"></td>
       <td><input name="iva11[1]" id="iva11[1]" type="text" size="5"></td>
       <td><input name="imposta[1]" id="imposta[1]" type="text" size="10"></td>
+      <td style="width: 35px;">
+        <div style="display: inline-block; min-width: 32px;">
+        <a class="btn" data-toggle="tooltip" data-placement="top">
+            <i>S</i>
+          </a>
+        </div>
+        </td>
     </tr>
     <tr>
       <td><input name="sottoconto[1]" id="sottoconto[1]" type="text" size="10"></td>
@@ -89,6 +97,13 @@
       <td><input name="iva[1]" id="iva[1]" type="text" size="5"></td>
       <td><input name="iva11[1]" id="iva11[1]" type="text" size="5"></td>
       <td><input name="imposta[1]" id="imposta[1]" type="text" size="10"></td>
+      <td style="width: 35px;">
+        <div style="display: inline-block; min-width: 32px;">
+        <a class="btn" data-toggle="tooltip" data-placement="top">
+            <i>S</i>
+          </a>
+        </div>
+        </td>
     </tr>
     <tr>
       <td><input name="sottoconto[1]" id="sottoconto[1]" type="text" size="10"></td>
@@ -96,6 +111,13 @@
       <td><input name="iva[1]" id="iva[1]" type="text" size="5"></td>
       <td><input name="iva11[1]" id="iva11[1]" type="text" size="5"></td>
       <td><input name="imposta[1]" id="imposta[1]" type="text" size="10"></td>
+      <td style="width: 35px;">
+        <div style="display: inline-block; min-width: 32px;">
+        <a class="btn" data-toggle="tooltip" data-placement="top">
+            <i>S</i>
+          </a>
+        </div>
+        </td>
     </tr>
     <tr>
       <td><input name="sottoconto[1]" id="sottoconto[1]" type="text" size="10"></td>
@@ -103,34 +125,13 @@
       <td><input name="iva[1]" id="iva[1]" type="text" size="5"></td>
       <td><input name="iva11[1]" id="iva11[1]" type="text" size="5"></td>
       <td><input name="imposta[1]" id="imposta[1]" type="text" size="10"></td>
-    </tr>
-    <tr>
-      <td><input name="sottoconto[1]" id="sottoconto[1]" type="text" size="10"></td>
-      <td><input name="imponibile[1]" id="imponibile[1]" type="text" size="10"></td>
-      <td><input name="iva[1]" id="iva[1]" type="text" size="5"></td>
-      <td><input name="iva11[1]" id="iva11[1]" type="text" size="5"></td>
-      <td><input name="imposta[1]" id="imposta[1]" type="text" size="10"></td>
-    </tr>
-    <tr>
-      <td><input name="sottoconto[1]" id="sottoconto[1]" type="text" size="10"></td>
-      <td><input name="imponibile[1]" id="imponibile[1]" type="text" size="10"></td>
-      <td><input name="iva[1]" id="iva[1]" type="text" size="5"></td>
-      <td><input name="iva11[1]" id="iva11[1]" type="text" size="5"></td>
-      <td><input name="imposta[1]" id="imposta[1]" type="text" size="10"></td>
-    </tr>
-    <tr>
-      <td><input name="sottoconto[1]" id="sottoconto[1]" type="text" size="10"></td>
-      <td><input name="imponibile[1]" id="imponibile[1]" type="text" size="10"></td>
-      <td><input name="iva[1]" id="iva[1]" type="text" size="5"></td>
-      <td><input name="iva11[1]" id="iva11[1]" type="text" size="5"></td>
-      <td><input name="imposta[1]" id="imposta[1]" type="text" size="10"></td>
-    </tr>
-    <tr>
-      <td><input name="sottoconto[1]" id="sottoconto[1]" type="text" size="10"></td>
-      <td><input name="imponibile[1]" id="imponibile[1]" type="text" size="10"></td>
-      <td><input name="iva[1]" id="iva[1]" type="text" size="5"></td>
-      <td><input name="iva11[1]" id="iva11[1]" type="text" size="5"></td>
-      <td><input name="imposta[1]" id="imposta[1]" type="text" size="10"></td>
+      <td style="width: 35px;">
+        <div style="display: inline-block; min-width: 32px;">
+        <a class="btn" data-toggle="tooltip" data-placement="top">
+            <i>S</i>
+          </a>
+        </div>
+        </td>
     </tr>
 
   </table>
@@ -166,7 +167,18 @@ var focus = 0,
   blur = 0;
 $( "input[name='cf']" )
   .focusout(function() {
-    focus++;
+    if (CodiceFiscale.value.search(pattern) == -1)
+    {
+      // In caso di errore stampo un avviso e pulisco il campo...
+
+      CodiceFiscale.value = "";
+      CodiceFiscale.focus();
+    }else{
+       // ...in caso contrario stampo un avviso di successo!
+       alert("Il codice fiscale è corretto!");
+    }
+  }
+
 
   })
 function showragsoc()
@@ -184,4 +196,3 @@ function showragsoc()
     </div>
 </body>
 </html>
-controllaCF()
