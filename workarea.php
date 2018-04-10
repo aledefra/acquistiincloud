@@ -49,11 +49,11 @@
   C.F.: <input name="cf" id="cf" type="text" onfocusout="determinaPersFis()">
   P.IVA: <input name="piva" id="piva" type="text" onfocusout="determinaPersFis()">
   <br><br>
-  <div id="personaFisica" style="display: inline">
+  <div id="personaFisica" class="div-inline">
     Nome: <input name="nome" id="nome" type="text">
     Cognome: <input name="cognome" id="cognome" type="text">
   </div>
-  <div id="societa" style="display: inline">
+  <div id="societa" class="div-inline">
     Ragione sociale: <input name="ragsoc" id="ragosoc" type="text">
   </div>
   <br><br>
@@ -65,7 +65,7 @@
   <br><br>
   <hr>
   <h3>Dati contabili</h3>
-  Totale: <input name="totFatt" id="totFatt" type="text">
+  Totale: <input name="totFatt" id="totFatt" type="text" onfocusout="trascriviTotFatt()">
   Ritenuta d'acconto: <input name="ritAcc" id="ritAcc" type="text">
   <br><br>
   Causale: <input name="causale" id="causale" type="text" size="4">
@@ -136,6 +136,20 @@
         </div>
       </td>
     </tr>
+    <tr>
+      <td><input name="sottoconto[5]" id="sottoconto[5]" type="text" size="10"></td>
+      <td><input name="imponibile[5]" id="imponibile[5]" type="text" size="10"></td>
+      <td><input name="iva[5]" id="iva[5]" type="text" size="5"></td>
+      <td><input name="iva11[5]" id="iva11[5]" type="text" size="5"></td>
+      <td><input name="imposta[5]" id="imposta[5]" type="text" size="10"></td>
+      <td style="width: 35px;">
+        <div style="display: inline-block; min-width: 32px;" onclick="scorpora(5)">
+          <a class="btn" id="S[5]" data-toggle="tooltip" data-placement="top">
+            <i>S</i>
+          </a>
+        </div>
+      </td>
+    </tr>
   </table>
   <br><br>
   <div id="subapprfatt">
@@ -177,6 +191,13 @@
 
   }
 
+//scrive il totale della fattura sulla prima riga se questa non è compilata
+  function trascriviTotFatt() {
+    if (document.getElementById("imponibile[1]").value == "") {
+      var totaleFatt = document.getElementById("totFatt").value;
+      document.getElementById("imponibile[1]").value = totaleFatt;
+    }
+  }
 
 //approssima il numero
   function roundNumber(number, digits) {

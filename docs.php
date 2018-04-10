@@ -54,7 +54,6 @@
     <?php
       creaRigaFatt();
     ?>
-
   </table>
 </div>
 </div>

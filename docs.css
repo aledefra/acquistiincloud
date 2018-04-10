@@ -185,7 +185,7 @@ tr:nth-child(even) {
   background: #26a69a;
   cursor: pointer;
 }
-  /* workarea comp */
+  /* workarea */
 
 .datifatt {
   margin-top: 70px;
@@ -215,6 +215,10 @@ tr:nth-child(even) {
   margin-top: 10px;
   position: absolute;
   width: 44%;
+}
+
+.div-inline {
+  display: inline;
 }
 #savefatt {
   display: inline;
