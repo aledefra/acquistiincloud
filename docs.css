@@ -1,7 +1,7 @@
 body {
   margin-top: 48px;
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Varela Round', sans-serif;
 }
 
 /* Barra di navigazione */
@@ -162,7 +162,7 @@ tr:nth-child(even) {
 
 .topmarg {
   margin-top: 55px;
-  font-family: 'Varela Round', sans-serf;
+  font-family: 'Varela Round', sans-serif;
   font-family: 16px;
 }
 
@@ -171,17 +171,17 @@ tr:nth-child(even) {
 }
 
 #file {
-  display: none;S
+  display: none;
 }
 
-.input-label {
+.input_label {
   background: #009688;
   color: #fff;
   padding:30px;
   transition: 0.3s;
 }
 
-.input-label:hover {
+.input_label:hover {
   background: #26a69a;
   cursor: pointer;
 }

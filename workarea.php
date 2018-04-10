@@ -27,32 +27,35 @@
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="index.js"></script>
   <link rel="icon" type="image/png" href="/acquistiincloud/images/favicon.png">
 
 </head>
 <body>
-    <div class="div-fatt">
-      <div class="div-pdffatt">
-        <?php
-          loadPDF($_GET['idDoc']);
-        ?>
-      </div>
-        <div class="div-datifatt">
-
-          <h3>Dati Generici</h3>
-
+  <div class="div-fatt">
+    <div class="div-pdffatt">
+      <?php
+        loadPDF($_GET['idDoc']);
+      ?>
+    </div>
+  <div class="div-datifatt">
   <form action="">
+  <h3>Dati Generici</h3>
   Nr. doc: <input name="ndoc" id="ndoc" type="text">
   Data doc: <input name="datadoc" id=" datadoc" type="date">
   <br><br>
   <hr>
   <h3>Fornitore</h3>
-  C.F.: <input name="cf" id="cf" type="text">
-  P.IVA: <input name="piva" id="piva" type="text">
+  C.F.: <input name="cf" id="cf" type="text" onfocusout="determinaPersFis()">
+  P.IVA: <input name="piva" id="piva" type="text" onfocusout="determinaPersFis()">
   <br><br>
-  Nome: <input name="nome" id="nome" type="text">
-  Cognome: <input name="cognome" id="cognome" type="text">
-  Ragione sociale: <input name="ragsoc" id="ragosoc" type="text">
+  <div id="personaFisica" style="display: inline">
+    Nome: <input name="nome" id="nome" type="text">
+    Cognome: <input name="cognome" id="cognome" type="text">
+  </div>
+  <div id="societa" style="display: inline">
+    Ragione sociale: <input name="ragsoc" id="ragosoc" type="text">
+  </div>
   <br><br>
   Indirizzo: <input name="via" id="via" type="text">
   <input name="nCivico" id="nCivico" type="text" size="6">
@@ -84,115 +87,103 @@
       <td><input name="iva11[1]" id="iva11[1]" type="text" size="5"></td>
       <td><input name="imposta[1]" id="imposta[1]" type="text" size="10"></td>
       <td style="width: 35px;">
-        <div style="display: inline-block; min-width: 32px;">
-        <a class="btn" data-toggle="tooltip" data-placement="top">
+        <div style="display: inline-block; min-width: 32px;" onclick="scorpora(1)">
+          <a class="btn" id="S[1]" data-toggle="tooltip" data-placement="top">
             <i>S</i>
           </a>
         </div>
-        </td>
+      </td>
     </tr>
     <tr>
-      <td><input name="sottoconto[1]" id="sottoconto[1]" type="text" size="10"></td>
-      <td><input name="imponibile[1]" id="imponibile[1]" type="text" size="10"></td>
-      <td><input name="iva[1]" id="iva[1]" type="text" size="5"></td>
-      <td><input name="iva11[1]" id="iva11[1]" type="text" size="5"></td>
-      <td><input name="imposta[1]" id="imposta[1]" type="text" size="10"></td>
+      <td><input name="sottoconto[2]" id="sottoconto[2]" type="text" size="10"></td>
+      <td><input name="imponibile[2]" id="imponibile[2]" type="text" size="10"></td>
+      <td><input name="iva[2]" id="iva[2]" type="text" size="5"></td>
+      <td><input name="iva11[2]" id="iva11[2]" type="text" size="5"></td>
+      <td><input name="imposta[2]" id="imposta[2]" type="text" size="10"></td>
       <td style="width: 35px;">
-        <div style="display: inline-block; min-width: 32px;">
-        <a class="btn" data-toggle="tooltip" data-placement="top">
+        <div style="display: inline-block; min-width: 32px;" onclick="scorpora(2)">
+          <a class="btn" id="S[2]" data-toggle="tooltip" data-placement="top">
             <i>S</i>
           </a>
         </div>
-        </td>
+      </td>
     </tr>
     <tr>
-      <td><input name="sottoconto[1]" id="sottoconto[1]" type="text" size="10"></td>
-      <td><input name="imponibile[1]" id="imponibile[1]" type="text" size="10"></td>
-      <td><input name="iva[1]" id="iva[1]" type="text" size="5"></td>
-      <td><input name="iva11[1]" id="iva11[1]" type="text" size="5"></td>
-      <td><input name="imposta[1]" id="imposta[1]" type="text" size="10"></td>
+      <td><input name="sottoconto[3]" id="sottoconto[3]" type="text" size="10"></td>
+      <td><input name="imponibile[3]" id="imponibile[3]" type="text" size="10"></td>
+      <td><input name="iva[3]" id="iva[3]" type="text" size="5"></td>
+      <td><input name="iva11[3]" id="iva11[3]" type="text" size="5"></td>
+      <td><input name="imposta[3]" id="imposta[3]" type="text" size="10"></td>
       <td style="width: 35px;">
-        <div style="display: inline-block; min-width: 32px;">
-        <a class="btn" data-toggle="tooltip" data-placement="top">
+        <div style="display: inline-block; min-width: 32px;" onclick="scorpora(3)">
+          <a class="btn" id="S[3]" data-toggle="tooltip" data-placement="top">
             <i>S</i>
           </a>
         </div>
-        </td>
+      </td>
     </tr>
     <tr>
-      <td><input name="sottoconto[1]" id="sottoconto[1]" type="text" size="10"></td>
-      <td><input name="imponibile[1]" id="imponibile[1]" type="text" size="10"></td>
-      <td><input name="iva[1]" id="iva[1]" type="text" size="5"></td>
-      <td><input name="iva11[1]" id="iva11[1]" type="text" size="5"></td>
-      <td><input name="imposta[1]" id="imposta[1]" type="text" size="10"></td>
+      <td><input name="sottoconto[4]" id="sottoconto[4]" type="text" size="10"></td>
+      <td><input name="imponibile[4]" id="imponibile[4]" type="text" size="10"></td>
+      <td><input name="iva[4]" id="iva[4]" type="text" size="5"></td>
+      <td><input name="iva11[4]" id="iva11[4]" type="text" size="5"></td>
+      <td><input name="imposta[4]" id="imposta[4]" type="text" size="10"></td>
       <td style="width: 35px;">
-        <div style="display: inline-block; min-width: 32px;">
-        <a class="btn" data-toggle="tooltip" data-placement="top">
+        <div style="display: inline-block; min-width: 32px;" onclick="scorpora(4)">
+          <a class="btn" id="S[4]" data-toggle="tooltip" data-placement="top">
             <i>S</i>
           </a>
         </div>
-        </td>
+      </td>
     </tr>
-
   </table>
   <br><br>
-<div id="subapprfatt">
-<input name"savefatt" id="savefatt" type="submit" value="Salva" >
-<input name"apprfatt" id="apprfatt" type="submit" value="Approva" >
-</div>
-
-  <script language="Javascript">
-function controllaCF()
-{
-  // Definisco un pattern per il confronto
-  var pattern = /^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$/;
-
-  // creo una variabile per richiamare con facilità il nostro campo di input
-  var CodiceFiscale = document.getElementById("cf");
-
-  // utilizzo il metodo search per verificare che il valore inserito nel campo
-  // di input rispetti la stringa di verifica (pattern)
-  if (CodiceFiscale.value.search(pattern) == -1)
-  {
-    // In caso di errore stampo un avviso e pulisco il campo...
-    alert("Il valore inserito non è un codice fiscale!");
-    CodiceFiscale.value = "";
-    CodiceFiscale.focus();
-  }else{
-     // ...in caso contrario stampo un avviso di successo!
-     alert("Il codice fiscale è corretto!");
-  }
-}
-var focus = 0,
-  blur = 0;
-$( "input[name='cf']" )
-  .focusout(function() {
-    if (CodiceFiscale.value.search(pattern) == -1)
-    {
-      // In caso di errore stampo un avviso e pulisco il campo...
-
-      CodiceFiscale.value = "";
-      CodiceFiscale.focus();
-    }else{
-       // ...in caso contrario stampo un avviso di successo!
-       alert("Il codice fiscale è corretto!");
-    }
-  }
-
-
-  })
-function showragsoc()
-{
-  if (isNaN(document.getElementById("cf")))
-  {
-    var nome = document.createElement("input");
-    nome.setAttribute('type', 'text'  )
-  }
-}
-</script>
-
+  <div id="subapprfatt">
+    <input name"savefatt" id="savefatt" type="submit" value="Salva">
+    <input name"apprfatt" id="apprfatt" type="submit" value="Approva">
+  </div>
   </form>
-        </div>
-    </div>
+  </div>
+  </div>
 </body>
+<script>
+//script per scorporo IVA per ogni riga
+  function scorpora(riga) {
+    var totale = document.getElementById("imponibile["+ riga +"]").value;
+    var iva = document.getElementById("iva["+ riga +"]").value;
+    iva = iva / 100;
+    iva += 1;
+    var imponibile = totale / iva;
+    imponibile = roundNumber(imponibile, 2);
+    var imposta = totale - imponibile;
+    imposta = roundNumber(imposta, 2);
+    document.getElementById("imponibile["+ riga +"]").value = imponibile;
+    document.getElementById("imposta["+ riga +"]").value = imposta;
+  }
+
+//script per visualizzare Rag.Soc. o Nome e cognome
+  function determinaPersFis() {
+    var codFisc = document.getElementById("cf").value;
+    var PIva = document.getElementById("piva").value;
+    if ((!isNaN(codFisc) && !isNaN(PIva))) {
+      //mostra solo Ragione Sociale
+      $("#personaFisica").hide("fast");
+      $("#societa").show("fast");
+    } else {
+      //mostra Nome e Cognome
+      $("#personaFisica").show("fast");
+      $("#societa").hide("fast");
+    }
+
+  }
+
+
+//approssima il numero
+  function roundNumber(number, digits) {
+    var multiple = Math.pow(10, digits);
+    var rndedNum = Math.round(number * multiple) / multiple;
+    return rndedNum;
+  }
+
+</script>
 </html>

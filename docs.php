@@ -22,8 +22,11 @@
 
   <link rel="icon" type="image/png" href="/acquistiincloud/images/favicon.png">
 
+</head>
+<body class="topmarg">
+
   <div class="navbar">
-    <a class="active" href="#"><strong>Acquisti </strong>in <strong>Cloud</strong></a>
+    <a class="active" href="docs.php"><strong>Acquisti </strong>in <strong>Cloud</strong></a>
     <a class="reg-right" href="registra.php">Registra</a>
     <a class="reg-right" href="downFIC.php">Scarica fatture da FIC</a>
     <a class="reg-right" href="uploadPDF.php">Carica fatture</a>
@@ -31,9 +34,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
   </div>
-
-</head>
-<body>
 
 <div class="widget-box widget-position">
   <br><br><br><br><br><br>
