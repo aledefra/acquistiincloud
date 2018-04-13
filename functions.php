@@ -403,4 +403,163 @@ error_reporting(E_ALL);
     header("location: /acquistiincloud/docs.php");
    }
   }
+
+  function loadWorkArea($docID) {
+    // Create connection
+    $conn = new mysqli(servername, username, password, dbname);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $sql = "SELECT * FROM fatture
+            JOIN ditte on fatture.ditta = ditte.codiceDitta
+            LEFT JOIN controparti on fatture.controparte = controparti.idControp
+            LEFT JOIN ditteSez on fatture.sezionale = ditteSez.idSez
+            WHERE fatture.idFatt = $docID";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+          error_log($row["ragSocControp"]);
+          echo("
+          <div class=\"div-fatt\">
+            <div class=\"div-pdffatt\">
+              <iframe src=\"documents/".$row["codiceDitta"]."/".$row["idFatt"].".pdf\"class=\"pdfstyle\"></iframe>
+            </div>
+            <div class=\"div-datifatt\">
+              <form action=\"\">
+<h3>Dati Generici</h3>
+Nr. doc: <input name=\"ndoc\" id=\"ndoc\" type=\"text\" placeholder=\"Numero documento\" value=\"".$row["nFatt"]."\">
+Data doc: <input name=\"datadoc\" id=\" datadoc\" type=\"date\" placeholder=\"Data documento\" value=".$row["dataFatt"].">
+<br><br>
+<hr>
+<h3>Fornitore</h3>
+<input name=\"persFis\" id=\"persFis\" type=\"hidden\" value=".$row["personaFisica"].">
+C.F.: <input name=\"cf\" id=\"cf\" type=\"text\" placeholder=\"Codice Fiscale\" value=\"".$row["codFisc"]."\">
+P.IVA: <input name=\"piva\" id=\"piva\" type=\"text\" placeholder=\"Partita IVA\" value=\"".$row["pIva"]."\">
+<br><br>
+<div id=\"personaFisica\" class=\"div-inline\">
+  Nome: <input name=\"nome\" id=\"nome\" type=\"text\" placeholder=\"Nome\" value=\"".$row["nomeControp"]."\">
+  Cognome: <input name=\"cognome\" id=\"cognome\" type=\"text\" placeholder=\"Cognome\" value=\"".$row["cognControp"]."\">
+</div>
+<div id=\"societa\" class=\"div-inline\">
+  Ragione sociale: <input name=\"ragsoc\" id=\"ragsoc\" type=\"text\" placeholder=\"Ragione Sociale\" size=33 value=\"".$row["ragSocControp"]."\">
+</div>
+<br><br>
+Indirizzo: <input name=\"via\" id=\"via\" type=\"text\" placeholder=\"Indirizzo\" value=\"".$row["via"]."\">
+<input name=\"nCivico\" id=\"nCivico\" type=\"text\" size=\"6\" placeholder=\"Civico\" value=\"".$row["nCivico"]."\">
+CAP / Città: <input name=\"cap\" id=\"cap\" type=\"text\" size=\"6\" placeholder=\"CAP\" value=\"".$row["CAP"]."\">
+<input name=\"citta\" id=\"citta\" type=\"text\" placeholder=\"Città\" value=\"".$row["città"]."\">
+Provincia: <input name=\"provincia\" id=\"provincia\" type=\"text\" size=\"3\" placeholder=\"Provincia\" value=\"".$row["prov"]."\">
+<br><br>
+<hr>
+<h3>Dati contabili</h3>
+Totale: <input name=\"totFatt\" id=\"totFatt\" type=\"text\" onfocusout=\"trascriviTotFatt()\" placeholder=\"Importo totale\" value=\"".$row["totFatt"]."\">
+Ritenuta d'acconto: <input name=\"ritAcc\" id=\"ritAcc\" type=\"text\" placeholder=\"Ritenuta d'acconto\" value=\"".$row["importo_rit"]."\">
+<br><br>
+Causale: <input name=\"causale\" id=\"causale\" type=\"text\" size=\"4\" placeholder=\"Caus.\" value=\"".$row["causale"]."\">
+Sezionale: <input name=\"sezionale\" id=\"sezionale\" type=\"text\" size=\"4\" placeholder=\"Sez.\" value=\"".$row["codSezionale"]."\">
+<br><br>
+<table>
+  <tr>
+    <th>Sottoconto</th>
+    <th>Imponibile</th>
+    <th>IVA</th>
+    <th>IVA11</th>
+    <th>Imposta</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td><input name=\"sottoconto[1]\" id=\"sottoconto[1]\" type=\"text\" size=\"10\" value=\"".$row["conto[1]"]."\"></td>
+    <td><input name=\"imponibile[1]\" id=\"imponibile[1]\" type=\"text\" size=\"10\" value=\"".$row["imponibile[1]"]."\"></td>
+    <td><input name=\"iva[1]\" id=\"iva[1]\" type=\"text\" size=\"5\" value=\"".$row["aliquota_iva[1]"]."\"></td>
+    <td><input name=\"iva11[1]\" id=\"iva11[1]\" type=\"text\" size=\"5\" value=\"".$row["iva11[1]"]."\"></td>
+    <td><input name=\"imposta[1]\" id=\"imposta[1]\" type=\"text\" size=\"10\" value=\"".$row["imposta[1]"]."\"></td>
+    <td style=\"width: 35px;\">
+      <div style=\"display: inline-block; min-width: 32px;\" id=\"S[1]\">
+        <a class=\"btn\"data-toggle=\"tooltip\" data-placement=\"top\">
+          <i>S</i>
+        </a>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><input name=\"sottoconto[2]\" id=\"sottoconto[2]\" type=\"text\" size=\"10\" value=\"".$row["conto[2]"]."\"></td>
+    <td><input name=\"imponibile[2]\" id=\"imponibile[2]\" type=\"text\" size=\"10\" value=\"".$row["imponibile[2]"]."\"></td>
+    <td><input name=\"iva[2]\" id=\"iva[2]\" type=\"text\" size=\"5\" value=\"".$row["aliquota_iva[2]"]."\"></td>
+    <td><input name=\"iva11[2]\" id=\"iva11[2]\" type=\"text\" size=\"5\" value=\"".$row["iva11[2]"]."\"></td>
+    <td><input name=\"imposta[2]\" id=\"imposta[2]\" type=\"text\" size=\"10\" value=\"".$row["imposta[2]"]."\"></td>
+    <td style=\"width: 35px;\">
+      <div style=\"display: inline-block; min-width: 32px;\" id=\"S[2]\">
+        <a class=\"btn\" data-toggle=\"tooltip\" data-placement=\"top\">
+          <i>S</i>
+        </a>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><input name=\"sottoconto[3]\" id=\"sottoconto[3]\" type=\"text\" size=\"10\" value=\"".$row["conto[3]"]."\"></td>
+    <td><input name=\"imponibile[3]\" id=\"imponibile[3]\" type=\"text\" size=\"10\" value=\"".$row["imponibile[3]"]."\"></td>
+    <td><input name=\"iva[3]\" id=\"iva[3]\" type=\"text\" size=\"5\" value=\"".$row["aliquota_iva[3]"]."\"></td>
+    <td><input name=\"iva11[3]\" id=\"iva11[3]\" type=\"text\" size=\"5\" value=\"".$row["iva11[3]"]."\"></td>
+    <td><input name=\"imposta[3]\" id=\"imposta[3]\" type=\"text\" size=\"10\" value=\"".$row["imposta[3]"]."\"></td>
+    <td style=\"width: 35px;\">
+      <div style=\"display: inline-block; min-width: 32px;\" id=\"S[3]\">
+        <a class=\"btn\" data-toggle=\"tooltip\" data-placement=\"top\">
+          <i>S</i>
+        </a>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><input name=\"sottoconto[4]\" id=\"sottoconto[4]\" type=\"text\" size=\"10\" value=\"".$row["conto[4]"]."\"></td>
+    <td><input name=\"imponibile[4]\" id=\"imponibile[4]\" type=\"text\" size=\"10\" value=\"".$row["imponibile[4]"]."\"></td>
+    <td><input name=\"iva[4]\" id=\"iva[4]\" type=\"text\" size=\"5\" value=\"".$row["aliquota_iva[4]"]."\"></td>
+    <td><input name=\"iva11[4]\" id=\"iva11[4]\" type=\"text\" size=\"5\" value=\"".$row["iva11[4]"]."\"></td>
+    <td><input name=\"imposta[4]\" id=\"imposta[4]\" type=\"text\" size=\"10\" value=\"".$row["imposta[4]"]."\"></td>
+    <td style=\"width: 35px;\">
+      <div style=\"display: inline-block; min-width: 32px;\" id=\"S[4]\">
+        <a class=\"btn\" data-toggle=\"tooltip\" data-placement=\"top\">
+          <i>S</i>
+        </a>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td><input name=\"sottoconto[5]\" id=\"sottoconto[5]\" type=\"text\" size=\"10\" value=\"".$row["conto[5]"]."\"></td>
+    <td><input name=\"imponibile[5]\" id=\"imponibile[5]\" type=\"text\" size=\"10\" value=\"".$row["imponibile[5]"]."\"></td>
+    <td><input name=\"iva[5]\" id=\"iva[5]\" type=\"text\" size=\"5\" value=\"".$row["aliquota_iva[5]"]."\"></td>
+    <td><input name=\"iva11[5]\" id=\"iva11[5]\" type=\"text\" size=\"5\" value=\"".$row["iva11[5]"]."\"></td>
+    <td><input name=\"imposta[5]\" id=\"imposta[5]\" type=\"text\" size=\"10\" value=\"".$row["imposta[5]"]."\"></td>
+    <td style=\"width: 35px;\">
+      <div style=\"display: inline-block; min-width: 32px;\" id=\"S[5]\">
+        <a class=\"btn\" data-toggle=\"tooltip\" data-placement=\"top\">
+          <i>S</i>
+        </a>
+      </div>
+    </td>
+  </tr>
+</table>
+<br><br>
+<div id=\"subapprfatt\">
+  <input name\"savefatt\" id=\"savefatt\" type=\"submit\" value=\"Salva\">
+  <input name\"apprfatt\" id=\"apprfatt\" type=\"submit\" value=\"Approva\">
+</div>
+</form>
+</div>
+</div>
+");
+}
+    } else {
+      print("nessun risultato");
+    }
+    $conn->close();
+
+
+
+  }
+
+
+
+
 ?>

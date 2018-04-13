@@ -32,135 +32,36 @@
 
 </head>
 <body>
-  <div class="div-fatt">
-    <div class="div-pdffatt">
-      <?php
-        loadPDF($_GET['idDoc']);
-      ?>
-    </div>
-  <div class="div-datifatt">
-  <form action="">
-  <h3>Dati Generici</h3>
-  Nr. doc: <input name="ndoc" id="ndoc" type="text">
-  Data doc: <input name="datadoc" id=" datadoc" type="date">
-  <br><br>
-  <hr>
-  <h3>Fornitore</h3>
-  C.F.: <input name="cf" id="cf" type="text" onfocusout="determinaPersFis()">
-  P.IVA: <input name="piva" id="piva" type="text" onfocusout="determinaPersFis()">
-  <br><br>
-  <div id="personaFisica" class="div-inline">
-    Nome: <input name="nome" id="nome" type="text">
-    Cognome: <input name="cognome" id="cognome" type="text">
-  </div>
-  <div id="societa" class="div-inline">
-    Ragione sociale: <input name="ragsoc" id="ragosoc" type="text">
-  </div>
-  <br><br>
-  Indirizzo: <input name="via" id="via" type="text">
-  <input name="nCivico" id="nCivico" type="text" size="6">
-  CAP / Città: <input name="cap" id="cap" type="text" size="6">
-  <input name="citta" id="citta" type="text">
-  Provincia: <input name="provincia" id="provincia" type="text" size="3">
-  <br><br>
-  <hr>
-  <h3>Dati contabili</h3>
-  Totale: <input name="totFatt" id="totFatt" type="text" onfocusout="trascriviTotFatt()">
-  Ritenuta d'acconto: <input name="ritAcc" id="ritAcc" type="text">
-  <br><br>
-  Causale: <input name="causale" id="causale" type="text" size="4">
-  Sezionale: <input name="sezionale" id="sezionale" type="text" size="4">
-  <br><br>
-  <table>
-    <tr>
-      <th>Sottoconto</th>
-      <th>Imponibile</th>
-      <th>IVA</th>
-      <th>IVA11</th>
-      <th>Imposta</th>
-      <th></th>
-    </tr>
-    <tr>
-      <td><input name="sottoconto[1]" id="sottoconto[1]" type="text" size="10"></td>
-      <td><input name="imponibile[1]" id="imponibile[1]" type="text" size="10"></td>
-      <td><input name="iva[1]" id="iva[1]" type="text" size="5"></td>
-      <td><input name="iva11[1]" id="iva11[1]" type="text" size="5"></td>
-      <td><input name="imposta[1]" id="imposta[1]" type="text" size="10"></td>
-      <td style="width: 35px;">
-        <div style="display: inline-block; min-width: 32px;" onclick="scorpora(1)">
-          <a class="btn" id="S[1]" data-toggle="tooltip" data-placement="top">
-            <i>S</i>
-          </a>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td><input name="sottoconto[2]" id="sottoconto[2]" type="text" size="10"></td>
-      <td><input name="imponibile[2]" id="imponibile[2]" type="text" size="10"></td>
-      <td><input name="iva[2]" id="iva[2]" type="text" size="5"></td>
-      <td><input name="iva11[2]" id="iva11[2]" type="text" size="5"></td>
-      <td><input name="imposta[2]" id="imposta[2]" type="text" size="10"></td>
-      <td style="width: 35px;">
-        <div style="display: inline-block; min-width: 32px;" onclick="scorpora(2)">
-          <a class="btn" id="S[2]" data-toggle="tooltip" data-placement="top">
-            <i>S</i>
-          </a>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td><input name="sottoconto[3]" id="sottoconto[3]" type="text" size="10"></td>
-      <td><input name="imponibile[3]" id="imponibile[3]" type="text" size="10"></td>
-      <td><input name="iva[3]" id="iva[3]" type="text" size="5"></td>
-      <td><input name="iva11[3]" id="iva11[3]" type="text" size="5"></td>
-      <td><input name="imposta[3]" id="imposta[3]" type="text" size="10"></td>
-      <td style="width: 35px;">
-        <div style="display: inline-block; min-width: 32px;" onclick="scorpora(3)">
-          <a class="btn" id="S[3]" data-toggle="tooltip" data-placement="top">
-            <i>S</i>
-          </a>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td><input name="sottoconto[4]" id="sottoconto[4]" type="text" size="10"></td>
-      <td><input name="imponibile[4]" id="imponibile[4]" type="text" size="10"></td>
-      <td><input name="iva[4]" id="iva[4]" type="text" size="5"></td>
-      <td><input name="iva11[4]" id="iva11[4]" type="text" size="5"></td>
-      <td><input name="imposta[4]" id="imposta[4]" type="text" size="10"></td>
-      <td style="width: 35px;">
-        <div style="display: inline-block; min-width: 32px;" onclick="scorpora(4)">
-          <a class="btn" id="S[4]" data-toggle="tooltip" data-placement="top">
-            <i>S</i>
-          </a>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td><input name="sottoconto[5]" id="sottoconto[5]" type="text" size="10"></td>
-      <td><input name="imponibile[5]" id="imponibile[5]" type="text" size="10"></td>
-      <td><input name="iva[5]" id="iva[5]" type="text" size="5"></td>
-      <td><input name="iva11[5]" id="iva11[5]" type="text" size="5"></td>
-      <td><input name="imposta[5]" id="imposta[5]" type="text" size="10"></td>
-      <td style="width: 35px;">
-        <div style="display: inline-block; min-width: 32px;" onclick="scorpora(5)">
-          <a class="btn" id="S[5]" data-toggle="tooltip" data-placement="top">
-            <i>S</i>
-          </a>
-        </div>
-      </td>
-    </tr>
-  </table>
-  <br><br>
-  <div id="subapprfatt">
-    <input name"savefatt" id="savefatt" type="submit" value="Salva">
-    <input name"apprfatt" id="apprfatt" type="submit" value="Approva">
-  </div>
-  </form>
-  </div>
-  </div>
+  <?php
+    loadWorkArea($_GET['idDoc']);
+  ?>
 </body>
 <script>
+//observer per i campi
+  //imponibile e imposta per calcolo residuo fattura
+    document.getElementById("imponibile[1]").addEventListener("focusout", residuo);
+    document.getElementById("imponibile[2]").addEventListener("focusout", residuo);
+    document.getElementById("imponibile[3]").addEventListener("focusout", residuo);
+    document.getElementById("imponibile[4]").addEventListener("focusout", residuo);
+    document.getElementById("imponibile[5]").addEventListener("focusout", residuo);
+    document.getElementById("imposta[1]").addEventListener("focusout", residuo);
+    document.getElementById("imposta[2]").addEventListener("focusout", residuo);
+    document.getElementById("imposta[3]").addEventListener("focusout", residuo);
+    document.getElementById("imposta[4]").addEventListener("focusout", residuo);
+    document.getElementById("imposta[5]").addEventListener("focusout", residuo);
+  //pulsanti per scorporo
+    document.getElementById("S[1]").addEventListener("click", function() { scorpora(1) });
+    document.getElementById("S[2]").addEventListener("click", function() { scorpora(2) });
+    document.getElementById("S[3]").addEventListener("click", function() { scorpora(3) });
+    document.getElementById("S[4]").addEventListener("click", function() { scorpora(4) });
+    document.getElementById("S[5]").addEventListener("click", function() { scorpora(5) });
+  //codice fiscale e P.IVA per determinare se è persona persona fisica
+    document.getElementById("cf").addEventListener("focusout", function() { determinaPersFis(); checkCF() });
+    document.getElementById("piva").addEventListener("focusout", function() { determinaPersFis(); checkPIVA() });
+  //quando la pagina viene caricata viene determinato se il fornitore è persona fisica
+    document.getElementById("body").addEventListener("load", function() { determinaPersFis() });
+
+
 //script per scorporo IVA per ogni riga
   function scorpora(riga) {
     var totale = document.getElementById("imponibile["+ riga +"]").value;
@@ -183,10 +84,12 @@
       //mostra solo Ragione Sociale
       $("#personaFisica").hide("fast");
       $("#societa").show("fast");
+      document.getElementById("persFis").value = 0;
     } else {
       //mostra Nome e Cognome
       $("#personaFisica").show("fast");
       $("#societa").hide("fast");
+      document.getElementById("persFis").value = 1;
     }
 
   }
@@ -199,12 +102,171 @@
     }
   }
 
+//calcola il residuo della fattura
+  function residuo() {
+    var totFatt = parseFloat(document.getElementById("totFatt").value);
+    if (!isNaN(totFatt)) {
+      var imponibile = new Array();
+      imponibile[0] = document.getElementById("imponibile[1]");
+      imponibile[1] = document.getElementById("imponibile[2]");
+      imponibile[2] = document.getElementById("imponibile[3]");
+      imponibile[3] = document.getElementById("imponibile[4]");
+      imponibile[4] = document.getElementById("imponibile[5]");
+      var imposta = new Array();
+      imposta[0] = document.getElementById("imposta[1]");
+      imposta[1] = document.getElementById("imposta[2]");
+      imposta[2] = document.getElementById("imposta[3]");
+      imposta[3] = document.getElementById("imposta[4]");
+      imposta[4] = document.getElementById("imposta[5]");
+      var totaleCalc = 0.00;
+      var i;
+      var n;
+      for (i=0; i <= 4; i++) {
+        if (imponibile[i].value == "") {
+          for (n=0; n < i; n++) {
+            totaleCalc += imponibile[n].value - imposta[n].value;
+          }
+          var residuo = totFatt - totaleCalc;
+          if (residuo != 0.00) {
+            imponibile[i].value = roundNumber(residuo, 2);
+          }
+          break;
+          }
+        }
+      }
+    }
+
+//controlla la correttezza del codice fiscale
+  function checkCF() {
+    var cf = document.getElementById("cf").value;
+    var validi, i, s, set1, set2, setpari, setdisp, pos_omocodia, sost_omocodia;
+  	if( cf == '' )  return '';
+    if (document.getElementById("persFis").value == 1) {
+  	cf = cf.toUpperCase();
+  	if( cf.length != 16 )
+  		alert("La lunghezza del codice fiscale non è\n"
+  		+"corretta: il codice fiscale dovrebbe essere lungo\n"
+  		+"esattamente 16 caratteri.\n");
+  	validi = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  	for( i = 0; i < 16; i++ ){
+  		if( validi.indexOf( cf.charAt(i) ) == -1 )
+  			alert("Il codice fiscale contiene un carattere non valido `" +
+  				cf.charAt(i) +
+  				"'.\nI caratteri validi sono le lettere e le cifre.\n");
+  	}
+  	set1 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  	set2 = "ABCDEFGHIJABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  	setpari = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  	setdisp = "BAKPLCQDREVOSFTGUHMINJWZYX";
+  	pos_numeri = [6, 7, 9, 10, 12, 13, 14];
+  	pos_lettere = [0, 1, 2, 3, 4, 5, 8, 11, 15];
+  	sost_omocodia = {
+  		"L": "0",
+  		"M": "1",
+  		"N": "2",
+  		"P": "3",
+  		"Q": "4",
+  		"R": "5",
+  		"S": "6",
+  		"T": "7",
+  		"U": "8",
+  		"V": "9"
+  	};
+  	for( i = 0; i < pos_numeri.length; i++ ) {
+  		var pos = pos_numeri[i];
+  		var c = cf.charAt(pos);
+  		if(!isNumericChar(c) && sost_omocodia.hasOwnProperty(c)) {
+  			cf = replaceCharAt(cf, pos, sost_omocodia[c]);
+  		}
+  	}
+  	for( i = 0; i < pos_numeri.length; i++ ) {
+  		if(!isNumericChar(cf.charAt(pos_numeri[i])))
+  			alert("Il codice fiscale è formalmente errato.");
+  	}
+  	for( i = 0; i < pos_lettere.length; i++ ) {
+  		if(!isLetterChar(cf.charAt(pos_lettere[i])))
+  			alert("Il codice fiscale è formalmente errato.");
+  	}
+  	s = 0;
+  	for( i = 1; i <= 13; i += 2 )
+  		s += setpari.indexOf( set2.charAt( set1.indexOf( cf.charAt(i) )));
+  	for( i = 0; i <= 14; i += 2 )
+  		s += setdisp.indexOf( set2.charAt( set1.indexOf( cf.charAt(i) )));
+  	if( s%26 != cf.charCodeAt(15)-'A'.charCodeAt(0) )
+  		alert("Il codice fiscale non è corretto:\n"+
+  			"il codice di controllo non corrisponde.\n");
+  	return "";
+    }
+  }
+
+//controlla la correttezza della partita iva
+  function checkPIVA() {
+    var pi = document.getElementById("piva").value;
+    var allowPrefix = false;
+    if( pi == '' )  return '';
+  	pi = pi.toUpperCase();
+  	if( allowPrefix && pi.indexOf("IT")===0 )
+  		pi = pi.substring(2);
+  	if( pi.length != 11 )
+  		alert("La lunghezza della partita IVA non è\n" +
+  			"corretta: la partita IVA dovrebbe essere lunga\n" +
+  			"esattamente 11 caratteri.\n");
+  	validi = "0123456789";
+  	for( i = 0; i < 11; i++ ){
+  		if( validi.indexOf( pi.charAt(i) ) == -1 )
+  			alert("La partita IVA contiene un carattere non valido `" +
+  				pi.charAt(i) + "'.\nI caratteri validi sono le cifre.\n");
+  	}
+  	s = 0;
+  	for( i = 0; i <= 9; i += 2 )
+  		s += pi.charCodeAt(i) - '0'.charCodeAt(0);
+  	for( i = 1; i <= 9; i += 2 ){
+  		c = 2*( pi.charCodeAt(i) - '0'.charCodeAt(0) );
+  		if( c > 9 )  c = c - 9;
+  		s += c;
+  	}
+  	if( ( 10 - s%10 )%10 != pi.charCodeAt(10) - '0'.charCodeAt(0) )
+  		alert("La partita IVA non è valida:\n" +
+  			"il codice di controllo non corrisponde.\n");
+  	return '';
+  }
+
 //approssima il numero
   function roundNumber(number, digits) {
     var multiple = Math.pow(10, digits);
     var rndedNum = Math.round(number * multiple) / multiple;
     return rndedNum;
   }
+
+
+
+//funzioni per controllo CF e pIva
+function replaceCharAt(s, index, replacement) {
+    return s.substr(0, index) + replacement+ s.substr(index + replacement.length);
+}
+
+function isNumericChar(c) {
+    return (c >= '0' && c <= '9');
+}
+
+function isLetterChar(c) {
+  return (c >= 'A' && c <= 'Z');
+}
+
+function cleanPIVA(cod, allowPrefix) {
+  if(!cod) return "";
+  var newCod = cod.toUpperCase();
+  var prefix = allowPrefix && newCod.indexOf("IT")===0 ? "IT" : "";
+  return prefix + newCod.replace(/\D/g,'');
+}
+
+function cleanCF(cod, allowPrefix) {
+  if(!cod) return "";
+  var newCod = cod.toUpperCase();
+  var prefix = allowPrefix && newCod.indexOf("IT")===0 ? "IT" : "";
+  return prefix + newCod.replace(/\W/g,'');
+}
+
 
 </script>
 </html>
