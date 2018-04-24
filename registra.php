@@ -40,8 +40,10 @@
           retrieveDitteForDropdown();
         ?>
       </select><br>
+      Data di registrazione:<input type="date" name="datareg">
       <input type="submit" value="Registra Fatture" name="submit">
   </form>
+
 
 </body>
 </html>

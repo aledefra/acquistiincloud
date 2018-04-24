@@ -35,8 +35,25 @@
 
   </div>
 
-<div class="widget-box widget-position">
-  <br><br><br><br><br><br>
+<div class="widget-box widget-position"><br>
+      <h2 style="text-align:left; margin-left:60px; margin-top:20px;">Stato</h2>
+      <form style="text-align:left; margin-left:60px;">
+      <input type="checkbox" id="daregistrare">Da registrare<br>
+      <input type="checkbox" id="nuovo">Nuovo<br>
+      <input type="checkbox" id="registrato">Registrato<br>
+      <input type="checkbox" id="rifiutato">Rifiutato<br>
+      <input type="checkbox" id="contabilizzato">Contabilizzato
+
+        <select name="ditta">
+          <?php
+            retrieveDitteForDropdown();
+          ?>
+        </select>
+    </div>
+
+
+  </form>
+  </input>
 </div>
   <table>
     <tr>
@@ -49,6 +66,7 @@
       <th>Controparte</th>
       <th>Totale</th>
       <th>Stato</th>
+      <th></th>
       <th></th>
     </tr>
     <?php

@@ -1,10 +1,5 @@
 <!DOCTYPE html>
 <html>
-<script>
-<?php
-  include "functions.php";
-?>
-</script>
 <style>
 @import url(docs.css);
 </style>
@@ -31,49 +26,93 @@
   <link rel="icon" type="image/png" href="/acquistiincloud/images/favicon.png">
 
 </head>
+<script>
+<?php
+  include "functions.php";
+
+  if (isset($_POST['apprfatt'])) {
+    approvaFatt();
+  }
+
+?>
+</script>
 <body>
   <?php
     loadWorkArea($_GET['idDoc']);
   ?>
+
+  <div id="popupConto" class="overlay">
+    <div class="popup">
+    <br><br>
+    <input type="text" id="sottoconti" placeholder="Cerca il sottoconto" title="Cerca il sottoconto">
+      <table id="tableSottoconti">
+      <tr>
+        <th>Codice</th>
+        <th>Descrizione</th>
+      </tr>
+        <?php
+          sottocontiToTable();
+        ?>
+      </table>
+      <a class="close" href="#">&times;</a>
+    </div>
+  </div>
+
+  <div id="popupIva" class="overlay">
+    <div class="popup">
+    <br><br>
+    <input type="text" id="iva" placeholder="Cerca l'IVA" title="Cerca l'IVA">
+      <table id="tableIva">
+      <tr>
+        <th>Codice</th>
+        <th>Descrizione</th>
+      </tr>
+        <?php
+          IVAToTable();
+        ?>
+      </table>
+      <a class="close" href="#">&times;</a>
+    </div>
+  </div>
+
 </body>
 <script>
 //observer per i campi
   //imponibile e imposta per calcolo residuo fattura
-    document.getElementById("imponibile[1]").addEventListener("focusout", residuo);
-    document.getElementById("imponibile[2]").addEventListener("focusout", residuo);
-    document.getElementById("imponibile[3]").addEventListener("focusout", residuo);
-    document.getElementById("imponibile[4]").addEventListener("focusout", residuo);
-    document.getElementById("imponibile[5]").addEventListener("focusout", residuo);
-    document.getElementById("imposta[1]").addEventListener("focusout", residuo);
-    document.getElementById("imposta[2]").addEventListener("focusout", residuo);
-    document.getElementById("imposta[3]").addEventListener("focusout", residuo);
-    document.getElementById("imposta[4]").addEventListener("focusout", residuo);
-    document.getElementById("imposta[5]").addEventListener("focusout", residuo);
+    document.getElementById("imponibile_1").addEventListener("focusout", residuo);
+    document.getElementById("imponibile_2").addEventListener("focusout", residuo);
+    document.getElementById("imponibile_3").addEventListener("focusout", residuo);
+    document.getElementById("imponibile_4").addEventListener("focusout", residuo);
+    document.getElementById("imponibile_5").addEventListener("focusout", residuo);
+    document.getElementById("imposta_1").addEventListener("focusout", residuo);
+    document.getElementById("imposta_2").addEventListener("focusout", residuo);
+    document.getElementById("imposta_3").addEventListener("focusout", residuo);
+    document.getElementById("imposta_4").addEventListener("focusout", residuo);
+    document.getElementById("imposta_5").addEventListener("focusout", residuo);
   //pulsanti per scorporo
-    document.getElementById("S[1]").addEventListener("click", function() { scorpora(1) });
-    document.getElementById("S[2]").addEventListener("click", function() { scorpora(2) });
-    document.getElementById("S[3]").addEventListener("click", function() { scorpora(3) });
-    document.getElementById("S[4]").addEventListener("click", function() { scorpora(4) });
-    document.getElementById("S[5]").addEventListener("click", function() { scorpora(5) });
+    document.getElementById("S_1").addEventListener("click", function() { scorpora(1) });
+    document.getElementById("S_2").addEventListener("click", function() { scorpora(2) });
+    document.getElementById("S_3").addEventListener("click", function() { scorpora(3) });
+    document.getElementById("S_4").addEventListener("click", function() { scorpora(4) });
+    document.getElementById("S_5").addEventListener("click", function() { scorpora(5) });
   //codice fiscale e P.IVA per determinare se è persona persona fisica
     document.getElementById("cf").addEventListener("focusout", function() { determinaPersFis(); checkCF() });
     document.getElementById("piva").addEventListener("focusout", function() { determinaPersFis(); checkPIVA() });
-  //quando la pagina viene caricata viene determinato se il fornitore è persona fisica
-    document.getElementById("body").addEventListener("load", function() { determinaPersFis() });
-
+  //filtra i sottoconti
+    document.getElementById("sottoconti").addEventListener("keyup", function() { filterSottoconti() });
 
 //script per scorporo IVA per ogni riga
   function scorpora(riga) {
-    var totale = document.getElementById("imponibile["+ riga +"]").value;
-    var iva = document.getElementById("iva["+ riga +"]").value;
+    var totale = document.getElementById("imponibile_"+ riga).value;
+    var iva = document.getElementById("iva_"+ riga).value;
     iva = iva / 100;
     iva += 1;
     var imponibile = totale / iva;
     imponibile = roundNumber(imponibile, 2);
     var imposta = totale - imponibile;
     imposta = roundNumber(imposta, 2);
-    document.getElementById("imponibile["+ riga +"]").value = imponibile;
-    document.getElementById("imposta["+ riga +"]").value = imposta;
+    document.getElementById("imponibile_"+ riga).value = imponibile;
+    document.getElementById("imposta_"+ riga).value = imposta;
   }
 
 //script per visualizzare Rag.Soc. o Nome e cognome
@@ -96,9 +135,9 @@
 
 //scrive il totale della fattura sulla prima riga se questa non è compilata
   function trascriviTotFatt() {
-    if (document.getElementById("imponibile[1]").value == "") {
+    if (document.getElementById("imponibile_1").value == "") {
       var totaleFatt = document.getElementById("totFatt").value;
-      document.getElementById("imponibile[1]").value = totaleFatt;
+      document.getElementById("imponibile_1").value = totaleFatt;
     }
   }
 
@@ -107,17 +146,17 @@
     var totFatt = parseFloat(document.getElementById("totFatt").value);
     if (!isNaN(totFatt)) {
       var imponibile = new Array();
-      imponibile[0] = document.getElementById("imponibile[1]");
-      imponibile[1] = document.getElementById("imponibile[2]");
-      imponibile[2] = document.getElementById("imponibile[3]");
-      imponibile[3] = document.getElementById("imponibile[4]");
-      imponibile[4] = document.getElementById("imponibile[5]");
+      imponibile[0] = document.getElementById("imponibile_1");
+      imponibile[1] = document.getElementById("imponibile_2");
+      imponibile[2] = document.getElementById("imponibile_3");
+      imponibile[3] = document.getElementById("imponibile_4");
+      imponibile[4] = document.getElementById("imponibile_5");
       var imposta = new Array();
-      imposta[0] = document.getElementById("imposta[1]");
-      imposta[1] = document.getElementById("imposta[2]");
-      imposta[2] = document.getElementById("imposta[3]");
-      imposta[3] = document.getElementById("imposta[4]");
-      imposta[4] = document.getElementById("imposta[5]");
+      imposta[0] = document.getElementById("imposta_1");
+      imposta[1] = document.getElementById("imposta_2");
+      imposta[2] = document.getElementById("imposta_3");
+      imposta[3] = document.getElementById("imposta_4");
+      imposta[4] = document.getElementById("imposta_5");
       var totaleCalc = 0.00;
       var i;
       var n;
@@ -236,6 +275,24 @@
     var multiple = Math.pow(10, digits);
     var rndedNum = Math.round(number * multiple) / multiple;
     return rndedNum;
+  }
+
+//filtra i sottoconti
+  function filterSottoconti() {
+    var input, filter, table, tr, td, i;
+    input = document.getElementById("sottoconti");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("tableSottoconti");
+    tr = table.getElementsByTagName("tr");
+    for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1];
+        if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+
+        }
+    }
   }
 
 
