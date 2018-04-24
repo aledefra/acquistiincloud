@@ -577,14 +577,17 @@ error_reporting(E_ALL);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
+    // AGGIORNAMENTO FATTURA IN SQL
     $sql = "UPDATE fatture
             SET totFatt = ".$_POST["totFatt"].",
             nFatt = ".$_POST["ndoc"].",
-            dataFatt = \"".$_POST["datadoc"]."\",
             totFatt = ".$_POST["totFatt"].",
-            causale = ".$_POST["causale"].",";
+            causale = ".$_POST["causale"].",\n";
             if ($_POST["ritAcc"] != "") { //aggiorna la ritenuta
               $sql .= "importo_rit = ".$_POST["ritAcc"].",\n";
+            }
+            if ($_POST["datadoc"] != "") { //aggiorna la data
+              $sql .= "dataFatt = \"".$_POST["datadoc"]."\",\n";
             }
             for ($i = 1; $i <= 5; $i++) {
               if ($_POST["sottoconto_$i"] != "") { //aggiorna i sottoconti
@@ -606,13 +609,13 @@ error_reporting(E_ALL);
     $sql .= "stato = \"Da registrare\"
             WHERE idFatt = ".$_POST["idDoc"];
     $result = $conn->query($sql);
+    
     error_log($sql);
     $conn->close();
     header("location: /acquistiincloud/docs.php");
   }
 
   function approvaFatt() {
-    error_log("approvato");
     header("location: /acquistiincloud/docs.php");
   }
 
