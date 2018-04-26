@@ -80,11 +80,13 @@
 
         </div>
         <div class="div-filter2">
-          <select name="ditta">
+          <span class="select-wrapper">
+          <select name="ditta" class="custom-select">
             <?php
               retrieveDitteForDropdown();
             ?>
          </select>
+         </span
           <br><br>
           Causale
         </div>
