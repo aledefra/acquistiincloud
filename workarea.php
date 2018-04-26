@@ -29,11 +29,6 @@
 <script>
 <?php
   include "functions.php";
-
-  if (isset($_POST['apprfatt'])) {
-    approvaFatt();
-  }
-
 ?>
 </script>
 <body>
@@ -44,7 +39,7 @@
   <div id="popupSez" class="overlay">
     <div class="popup">
     <br><br>
-    <table id="tableSottoconti">
+    <table id="tableSezionali">
     <tr>
       <th>Codice</th>
       <th>Descrizione</th>
@@ -117,6 +112,7 @@
   //codice fiscale e P.IVA per determinare se è persona persona fisica
     document.getElementById("cf").addEventListener("focusout", function() { determinaPersFis(); checkCF() });
     document.getElementById("piva").addEventListener("focusout", function() { determinaPersFis(); checkPIVA() });
+    $(document).ready(function () { determinaPersFis() })
   //filtra i sottoconti
     document.getElementById("sottoconti").addEventListener("keyup", function() { filterSottoconti() });
 
@@ -138,18 +134,23 @@
   function determinaPersFis() {
     var codFisc = document.getElementById("cf").value;
     var PIva = document.getElementById("piva").value;
-    if ((!isNaN(codFisc) && !isNaN(PIva))) {
-      //mostra solo Ragione Sociale
-      $("#personaFisica").hide("fast");
-      $("#societa").show("fast");
-      document.getElementById("persFis").value = 0;
+    if (!(codFisc == "" && PIva == "")) {
+      if ((!isNaN(codFisc) && !isNaN(PIva))) {
+        //mostra solo Ragione Sociale
+        $("#personaFisica").hide("fast");
+        $("#societa").show("fast");
+        document.getElementById("persFis").value = 0;
+      } else {
+        //mostra Nome e Cognome
+        $("#personaFisica").show("fast");
+        $("#societa").hide("fast");
+        document.getElementById("persFis").value = 1;
+      }
     } else {
-      //mostra Nome e Cognome
       $("#personaFisica").show("fast");
-      $("#societa").hide("fast");
-      document.getElementById("persFis").value = 1;
+      $("#societa").show("fast");
+      document.getElementById("persFis").value = "";
     }
-
   }
 
 //scrive il totale della fattura sulla prima riga se questa non è compilata
