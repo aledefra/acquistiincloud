@@ -89,7 +89,7 @@ error_reporting(E_ALL);
               print("</td>");
               print("<td style=\"width: 50px;\">");  /* icona modifica/visualizza */
                 print("<div style=\"display: inline-block; min-width: 32px;\">");
-                  print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."\">");
+                  print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."&ditta=".$row["ditta"]."\">");
                     print("<i class=\"ace-icon fa fa-pencil bigger-120\"></i>");
                   print("</a>");
                 print("</div>");
@@ -104,7 +104,7 @@ error_reporting(E_ALL);
               print("</td>");
               print("<td style=\"width: 50px;\">");  /* icona modifica/visualizza */
                 print("<div style=\"display: inline-block; min-width: 32px;\">");
-                  print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."\">");
+                  print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."&ditta=".$row["ditta"]."\">");
                     print("<i class=\"ace-icon fa fa-pencil bigger-120\"></i>");
                   print("</a>");
                 print("</div>");
@@ -119,14 +119,14 @@ error_reporting(E_ALL);
               print("</td>");
               print("<td style=\"width: 50px;\">");  /* icona modifica/visualizza */
                 print("<div style=\"display: inline-block; min-width: 32px;\">");
-                  print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."\">");
+                  print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."&ditta=".$row["ditta"]."\">");
                     print("<i class=\"ace-icon fa fa-search\"></i>");
                   print("</a>");
                 print("</div>");
               print("</td>");
               print("<td style=\"width: 20px;\">");  /* icona undo */
                 print("<div style=\"display: inline-block; min-width: 32px;\">");
-                  print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."\">");
+                  print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."&ditta=".$row["ditta"]."\">");
                     print("<i class=\"ace-icon fa fa-undo\"></i>");
                   print("</a>");
                 print("</div>");
@@ -139,14 +139,14 @@ error_reporting(E_ALL);
               print("</td>");
               print("<td style=\"width: 50px;\">");  /* icona modifica/visualizza */
                 print("<div style=\"display: inline-block; min-width: 32px;\">");
-                  print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."\">");
+                  print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."&ditta=".$row["ditta"]."\">");
                     print("<i class=\"ace-icon fa fa-search\"></i>");
                   print("</a>");
                 print("</div>");
               print("</td>");
               print("<td style=\"width: 20px;\">");  /* icona undo */
                 print("<div style=\"display: inline-block; min-width: 32px;\">");
-                  print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."\">");
+                  print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."&ditta=".$row["ditta"]."\">");
                     print("<i class=\"ace-icon fa fa-undo\"></i>");
                   print("</a>");
                 print("</div>");
@@ -159,7 +159,7 @@ error_reporting(E_ALL);
               print("</td>");
               print("<td style=\"width: 50px;\">");  /* icona modifica/visualizza */
                 print("<div style=\"display: inline-block; min-width: 32px;\">");
-                  print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."\">");
+                  print("<a class=\"btn btn-xs btn-info\" data-toggle=\"tooltip\" data-placement=\"top\" data-title=\"Modifica\" href=\"/acquistiincloud/workarea.php?idDoc=".$row["idFatt"]."&ditta=".$row["ditta"]."\">");
                     print("<i class=\"ace-icon fa fa-search\"></i>");
                   print("</a>");
                 print("</div>");
@@ -229,8 +229,6 @@ error_reporting(E_ALL);
           // crea una riga per ogni ditta
           print("<option value=\"".$row["codiceDitta"]."\">".$row["nomeDitta"]."</option>");
         }
-    } else {
-      print("errore");
     }
     $conn->close();
   }
@@ -338,7 +336,7 @@ error_reporting(E_ALL);
         $conn->query($sql); //modifica lo stato della fattura
       }
     } else {
-      print("Nessun documento da contabilizzare");
+//    print("<script>window.alert(\"Nessun documento da contabilizzare\")</script>");
     }
     $file = fopen("TRAF2000", "w");
     fwrite($file, $TRAF2000);
@@ -434,7 +432,8 @@ error_reporting(E_ALL);
                 <h3>Dati Generici</h3>
                 Nr. doc: <input name=\"ndoc\" id=\"ndoc\" type=\"text\" autocomplete=\"off\" placeholder=\"Numero documento\" value=\"".$row["nFatt"]."\">
                 Data doc: <input name=\"datadoc\" id=\"datadoc\" type=\"date\" autocomplete=\"off\" placeholder=\"Data documento\" value=".$row["dataFatt"].">
-                <input name=\"idDoc\" type=\"hidden\" value=\"".$_GET["idDoc"]."\"
+                <input name=\"idDoc\" type=\"hidden\" value=\"".$_GET["idDoc"]."\">
+                <input name=\"ditta\" type=\"hidden\" value=\"".$_GET["ditta"]."\">
                 <br>
                 <hr>
                 <h3>Fornitore</h3>
@@ -464,6 +463,7 @@ error_reporting(E_ALL);
                 <br><br>
                 Causale: <input name=\"causale\" id=\"causale\" type=\"text\" autocomplete=\"off\" size=\"4\" placeholder=\"Caus.\" value=\"".$row["causale"]."\">
                 Sezionale: <input name=\"sezionale\" id=\"sezionale\" type=\"text\" autocomplete=\"off\" size=\"4\" placeholder=\"Sez.\" value=\"".$row["codSezionale"]."\">
+                            <a class=\"btnpopup\" href=\"#popupSez\"><i class=\"ace-icon fa fa-search\"></i></a>
                 <br><br>
                 <table>
                   <tr>
@@ -479,13 +479,13 @@ error_reporting(E_ALL);
                     print("
                     <tr>
                     <td><input name=\"sottoconto_$i\" id=\"sottoconto_$i\" type=\"text\" autocomplete=\"off\" size=\"10\" value=\"".$row["conto_$i"]."\">
-                       <a class=\"btnpopup\" href=\"#popupConto\">
+                       <a class=\"btnpopup\" href=\"#popupConto\" onclick=\"setRiga($i)\">
                        <i class=\"ace-icon fa fa-search\"></i>
                      </a>
                     </td>
                     <td><input name=\"imponibile_$i\" id=\"imponibile_$i\" type=\"text\" autocomplete=\"off\" size=\"10\" value=\"".$row["imponibile_$i"]."\"></td>
                     <td><input name=\"iva_$i\" id=\"iva_$i\" type=\"text\" autocomplete=\"off\" size=\"5\" value=\"".$row["aliquota_iva_$i"]."\">
-                       <a class=\"btnpopup\" href=\"#popupIva\">
+                       <a class=\"btnpopup\" href=\"#popupIva\" onclick=\"setRiga($i)\">
                        <i class=\"ace-icon fa fa-search\"></i>
                      </a>
                     </td>
@@ -538,6 +538,7 @@ error_reporting(E_ALL);
               "<tr>
                 <td>".$row["sottoconto"]."</td>
                 <td>".$row["descrizione"]."</td>
+                <td><a class=\"btnpopup\" onclick=\"cambiaSottoconto('".$row["sottoconto"]."')\"><i class=\"ace-icon fa fa-arrow-right\"></i></a></td>
               </tr>"
           );
         }
@@ -561,6 +562,32 @@ error_reporting(E_ALL);
               "<tr>
                 <td>".$row["codiceIva"]."</td>
                 <td>".$row["descrizione"]."</td>
+                <td><a class=\"btnpopup\" onclick=\"cambiaIVA('".$row["codiceIva"]."')\"><i class=\"ace-icon fa fa-arrow-right\"></i></a></td>
+              </tr>"
+          );
+        }
+    }
+    $conn->close();
+  }
+
+  function sezionaliToTable($ditta) {
+    // Create connection
+    $conn = new mysqli(servername, username, password, dbname);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $sql = "SELECT * FROM ditteSez
+            WHERE codDitta = ".$ditta;
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+          print(
+              "<tr>
+                <td>".$row["codSezionale"]."</td>
+                <td>".$row["descrizioneSez"]."</td>
+                <td><a class=\"btnpopup\" onclick=\"cambiaSez(".$row["codSezionale"].")\"><i class=\"ace-icon fa fa-arrow-right\"></i></a></td>
               </tr>"
           );
         }
@@ -583,6 +610,9 @@ error_reporting(E_ALL);
             nFatt = ".$_POST["ndoc"].",
             totFatt = ".$_POST["totFatt"].",
             causale = ".$_POST["causale"].",\n";
+            if ($_POST["sezionale"] != "") { //aggiorna il sezionale
+              $sql .= "sezionale = (SELECT idSez FROM ditteSez WHERE codSezionale = ".$_POST["sezionale"]." AND codDitta = ".$_POST["ditta"]."),\n";
+            }
             if ($_POST["ritAcc"] != "") { //aggiorna la ritenuta
               $sql .= "importo_rit = ".$_POST["ritAcc"].",\n";
             }
@@ -609,7 +639,7 @@ error_reporting(E_ALL);
     $sql .= "stato = \"Da registrare\"
             WHERE idFatt = ".$_POST["idDoc"];
     $result = $conn->query($sql);
-    
+
     error_log($sql);
     $conn->close();
     header("location: /acquistiincloud/docs.php");

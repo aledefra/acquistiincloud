@@ -41,6 +41,23 @@
     loadWorkArea($_GET['idDoc']);
   ?>
 
+  <div id="popupSez" class="overlay">
+    <div class="popup">
+    <br><br>
+    <table id="tableSottoconti">
+    <tr>
+      <th>Codice</th>
+      <th>Descrizione</th>
+      <th></th>
+    </tr>
+      <?php
+        sezionaliToTable($_GET["ditta"]);
+      ?>
+    </table>
+    <a class="close" href="#">&times;</a>
+    </div>
+  </div>
+
   <div id="popupConto" class="overlay">
     <div class="popup">
     <br><br>
@@ -49,6 +66,7 @@
       <tr>
         <th>Codice</th>
         <th>Descrizione</th>
+        <th></th>
       </tr>
         <?php
           sottocontiToTable();
@@ -66,6 +84,7 @@
       <tr>
         <th>Codice</th>
         <th>Descrizione</th>
+        <th></th>
       </tr>
         <?php
           IVAToTable();
@@ -293,6 +312,35 @@
 
         }
     }
+  }
+//imposta la variabile globale riga
+  var riga;
+  function setRiga(parRiga) {
+    riga = parRiga;
+  }
+
+//inserisce il sezionale desiderato nel campo giusto
+  function cambiaSez(sezionale) {
+    document.getElementById("sezionale").value = sezionale;
+    location.href = "#"
+  }
+
+//inserisce il sottoconto desiderato nel campo giusto
+  function cambiaSottoconto(sottoconto) {
+    var id;
+    id = "sottoconto_" + riga;
+    document.getElementById(id).value = sottoconto;
+    riga = "";
+    location.href = "#"
+  }
+
+//inserisce il cod iva desiderato nel campo giusto
+  function cambiaIVA(iva) {
+    var id;
+    id = "iva_" + riga;
+    document.getElementById(id).value = iva;
+    riga = "";
+    location.href = "#"
   }
 
 
