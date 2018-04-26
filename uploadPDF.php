@@ -10,6 +10,8 @@
 
 <head>
 
+<meta charset="UTF-8">
+
   <title>
     Carica fatture
   </title>
