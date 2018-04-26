@@ -5,6 +5,8 @@
 </style>
 <head>
 
+<meta charset="UTF-8">
+
 <title>
     Modifica documento
   </title>

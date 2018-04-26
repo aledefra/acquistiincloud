@@ -7,6 +7,8 @@
 </script>
 <head>
 
+<meta charset="UTF-8">
+
   <title>
     Acquisti in Cloud
   </title>
@@ -20,7 +22,21 @@
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+
   <link rel="icon" type="image/png" href="/acquistiincloud/images/favicon.png">
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+        $(".custom-select").each(function(){
+            $(this).wrap("<span class='select-wrapper'></span>");
+            $(this).after("<span class='holder'></span>");
+        });
+        $(".custom-select").change(function(){
+            var selectedOption = $(this).find(":selected").text();
+            $(this).next(".holder").text(selectedOption);
+        }).trigger('change');
+    })
+  </script>
 
 </head>
 <body class="topmarg">
@@ -40,24 +56,40 @@
       <form>
         <div class="div-filter1">
           <h2>Stato</h2>
-          <input type="checkbox" id="daregistrare">Da registrare<br>
-          <input type="checkbox" id="nuovo">Nuovo<br>
-          <input type="checkbox" id="registrato">Registrato<br>
-          <input type="checkbox" id="rifiutato">Rifiutato<br>
-          <input type="checkbox" id="contabilizzato">Contabilizzato
+          <label class="container">
+            <input type="checkbox" id="daregistrare">Da registrare
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">
+            <input type="checkbox" id="nuovo">Nuovo
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">
+            <input type="checkbox" id="registrato">Registrato
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">
+            <input type="checkbox" id="rifiutato">Rifiutato
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">
+            <input type="checkbox" id="contabilizzato">Contabilizzato
+            <span class="checkmark"></span>
+          </label>
+
+
         </div>
         <div class="div-filter2">
           <select name="ditta">
             <?php
               retrieveDitteForDropdown();
             ?>
-          </select>
-          <br><br>
-          Controparte
+         </select>
           <br><br>
           Causale
         </div>
         <div class="div-filter3">
+          <br><br>
           Numero
           <br><br>
           Protocollo
@@ -69,8 +101,6 @@
       </form>
     </div>
 </div>
-
-
 
   <table>
     <tr>

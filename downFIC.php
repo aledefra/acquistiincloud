@@ -10,6 +10,8 @@
 </script>
 <head>
 
+  <meta charset="UTF-8">
+
   <title>
     Scarica da fatture in cloud
   </title>
