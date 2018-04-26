@@ -36,25 +36,42 @@
   </div>
 
 <div class="widget-box widget-position"><br>
-      <h2 style="text-align:left; margin-left:60px; margin-top:20px;">Stato</h2>
-      <form style="text-align:left; margin-left:60px;">
-      <input type="checkbox" id="daregistrare">Da registrare<br>
-      <input type="checkbox" id="nuovo">Nuovo<br>
-      <input type="checkbox" id="registrato">Registrato<br>
-      <input type="checkbox" id="rifiutato">Rifiutato<br>
-      <input type="checkbox" id="contabilizzato">Contabilizzato
-
-        <select name="ditta">
-          <?php
-            retrieveDitteForDropdown();
-          ?>
-        </select>
+    <div class="div-filterfull">
+      <form>
+        <div class="div-filter1">
+          <h2>Stato</h2>
+          <input type="checkbox" id="daregistrare">Da registrare<br>
+          <input type="checkbox" id="nuovo">Nuovo<br>
+          <input type="checkbox" id="registrato">Registrato<br>
+          <input type="checkbox" id="rifiutato">Rifiutato<br>
+          <input type="checkbox" id="contabilizzato">Contabilizzato
+        </div>
+        <div class="div-filter2">
+          <select name="ditta">
+            <?php
+              retrieveDitteForDropdown();
+            ?>
+          </select>
+          <br><br>
+          Controparte
+          <br><br>
+          Causale
+        </div>
+        <div class="div-filter3">
+          Numero
+          <br><br>
+          Protocollo
+          <br><br>
+          Data da
+          <br><br>
+          Data a
+        </div>
+      </form>
     </div>
-
-
-  </form>
-  </input>
 </div>
+
+
+
   <table>
     <tr>
       <th>Ditta</th>

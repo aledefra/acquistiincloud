@@ -280,12 +280,13 @@ tr:nth-child(even) {
 
   /* Filtri */
 
-  .widget-box {
-      padding: 0;
-      -webkit-box-shadow: none;
-      box-shadow: none;
-      margin: 3px 0;
-      border-right: 1px solid #CCC;
+.widget-box {
+    padding: 0;
+    height:30vh;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    margin: 3px 0;
+    border-right: 1px solid #CCC;
   }
 
 .widget-position {
@@ -351,24 +352,34 @@ tr:nth-child(even) {
 }
 
 .div-filterfull {
-  margin-top: 52px;
-  height:34%;
+  height:10%;
   width: 100%;
-  position: fixed;
+  position: absolute;
+  text-align: left;
 }
 
-.div-filter {
-  left:0px;
+.div-filter1 {
+  height: 10%;
+  left:5%;
   padding:0px;
   position: absolute;
-  width: 20%;
+  width:20%;
 }
 
 .div-filter2 {
-  left:25%;
+  height: 10%;
+  left:30%;
   padding:0px;
   position: absolute;
-  width: 44%;
+  width:20%;
+}
+
+.div-filter3 {
+  height: 10%;
+  left:60%;
+  padding:0px;
+  position: absolute;
+  width:35%;
 }
 
 .div-inline {
