@@ -502,7 +502,7 @@ error_reporting(E_ALL);
                   ");
                   }
                 print("</table>
-                <br><br>
+                <br>
                 <div id=\"subapprfatt\">
                   <input name\"savefatt\" id=\"savefatt\" type=\"submit\" formaction=\"salva.php\" value=\"Salva\">
                   <input name\"apprfatt\" id=\"apprfatt\" type=\"submit\" formaction=\"approva.php\" value=\"Approva\">
@@ -609,7 +609,8 @@ error_reporting(E_ALL);
             SET totFatt = ".$_POST["totFatt"].",
             nFatt = ".$_POST["ndoc"].",
             totFatt = ".$_POST["totFatt"].",
-            causale = ".$_POST["causale"].",\n";
+            causale = ".$_POST["causale"].",
+            controparte = (SELECT idControp FROM controparti WHERE pIva = \"".$_POST["piva"]."\" OR codFisc = \"".$_POST["cf"]."\" OR ragSocControp = \"".$_POST["ragsoc"]."\" OR nomeControp = \"".$_POST["nome"]."\" OR cognControp = \"".$_POST["cognome"]."\"),\n";
             if ($_POST["sezionale"] != "") { //aggiorna il sezionale
               $sql .= "sezionale = (SELECT idSez FROM ditteSez WHERE codSezionale = ".$_POST["sezionale"]." AND codDitta = ".$_POST["ditta"]."),\n";
             }
