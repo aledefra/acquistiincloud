@@ -354,7 +354,7 @@ tr:nth-child(even) {
 .div-filterfull {
   height:10%;
   width: 100%;
-  position: absolute;
+  position: relative;
   text-align: left;
 }
 
@@ -364,6 +364,7 @@ tr:nth-child(even) {
   padding:0px;
   position: absolute;
   width:20%;
+  font-size: 14px;
 }
 
 .div-filter2 {
@@ -372,6 +373,7 @@ tr:nth-child(even) {
   padding:0px;
   position: absolute;
   width:20%;
+  font-size: 14px;
 }
 
 .div-filter3 {
@@ -380,6 +382,7 @@ tr:nth-child(even) {
   padding:0px;
   position: absolute;
   width:35%;
+  font-size: 14px;
 }
 
 .div-inline {
@@ -460,37 +463,26 @@ tr:nth-child(even) {
     transform: rotate(45deg);
 }
 
-/* Dropdown menù */
+/* input personalizzato */
 
-.select-wrapper{
-  float: left;
-  display: inline-block;
-  border: 1px solid #d8d8d8;
-  background: url("/acquistiincloud/dropdown.png") no-repeat right center;
-  cursor: pointer;
+.submitbtn {
+    width: 10%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 12%;
+    margin-bottom: 16px;
+    margin-left: 88%;
+    resize: vertical;
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
-.select-wrapper, .select-wrapper select{
-  width: 200px;
-  height: 26px;
-  line-height: 26px;
+
+.submitbtn:hover {
+    background-color: #45a049;
 }
-.select-wrapper:hover{
-  background: url("/acquistiincloud/dropdown-hover.png") no-repeat right center;
-  border-color: #239fdb;
-}
-.select-wrapper .holder{
-  display: block;
-  margin: 0 35px 0 5px;
-  white-space: nowrap;
-  overflow: hidden;
-  cursor: pointer;
-  position: relative;
-  z-index: -1;
-}
-.select-wrapper select{
-  margin: 0;
-  position: absolute;
-  z-index: 2;
-  cursor: pointer;
-  outline: none;
-  opacity: 0;

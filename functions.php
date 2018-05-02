@@ -43,7 +43,7 @@ error_reporting(E_ALL);
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $sql = "SELECT fatture.idFatt, fatture.ditta, fatture.controparte, fatture.dataCaric, fatture.causale, fatture.dataFatt, fatture.nFatt, fatture.nProtocollo, fatture.totFatt, fatture.stato, ditte.nomeDitta, controparti.ragSocControp, controparti.nomeControp, controparti.cognControp, controparti.personaFisica
+    $sql = "SELECT *
     FROM fatture
     JOIN ditte on fatture.ditta = ditte.codiceDitta
     LEFT JOIN controparti on fatture.controparte = controparti.idControp
@@ -54,6 +54,7 @@ error_reporting(E_ALL);
         // output data of each row
         while($row = $result->fetch_assoc()) {
           print("<tr>");  /*inizio riga*/
+          print("<td style=\"display:none\">".$row["ditta"]."</td>");
           print("<td>".$row["nomeDitta"]."</td>"); /* ditta */
           if ($row["dataCaric"]) {
             $sqlDate = strtotime($row["dataCaric"]);  /*rende il formato */
@@ -376,8 +377,8 @@ error_reporting(E_ALL);
              $fatture = array_filter($resultJSON["lista_documenti"]);
              foreach ($fatture as $doc) {
                // Inserisce una nuova riga per fattura nel DB
-               $sql = "INSERT INTO fatture (ditta, stato, dataFatt, totFatt, idFIC)
-                       SELECT * FROM (SELECT ".$_POST["ditta"].", \"Nuovo\", STR_TO_DATE(\"".$doc['data']."\", \"%d/%m/%Y\"), ".$doc["importo_totale"].", ".$doc["id"].") AS tmp
+               $sql = "INSERT INTO fatture (ditta, stato, dataFatt, totFatt, nFatt, idFIC)
+                       SELECT * FROM (SELECT ".$_POST["ditta"].", \"Nuovo\", STR_TO_DATE(\"".$doc['data']."\", \"%d/%m/%Y\"), ".$doc["importo_totale"].", ".$doc["descrizione"].", ".$doc["id"].") AS tmp
                        WHERE NOT EXISTS (
                          SELECT idFIC FROM fatture WHERE idFIC = ".$doc["id"]."
                        )";
@@ -453,7 +454,7 @@ error_reporting(E_ALL);
                 Indirizzo: <input name=\"via\" id=\"via\" type=\"text\" autocomplete=\"off\" placeholder=\"Indirizzo\" value=\"".$row["via"]."\">
                 <input name=\"nCivico\" id=\"nCivico\" type=\"text\" autocomplete=\"off\" size=\"6\" placeholder=\"Civico\" value=\"".$row["nCivico"]."\">
                 CAP / Città: <input name=\"cap\" id=\"cap\" type=\"text\" autocomplete=\"off\" size=\"6\" placeholder=\"CAP\" value=\"".$row["CAP"]."\">
-                <input name=\"citta\" id=\"citta\" type=\"text\" autocomplete=\"off\" placeholder=\"Città\" value=\"".$row["città"]."\">
+                <input name=\"citta\" id=\"citta\" type=\"text\" autocomplete=\"off\" placeholder=\"Città\" value=\"".$row["citta"]."\">
                 Provincia: <input name=\"provincia\" id=\"provincia\" type=\"text\" autocomplete=\"off\" size=\"3\" placeholder=\"Provincia\" value=\"".$row["prov"]."\">
                 <br>
                 <hr>
@@ -595,7 +596,13 @@ error_reporting(E_ALL);
     $conn->close();
   }
 
-
+  function sqler($d) {
+    if ($d == "") {
+      return "NULL";
+    } else {
+      return "\"$d\"";
+    }
+  }
 
   function salvaFatt() {
     // Create connection
@@ -605,41 +612,33 @@ error_reporting(E_ALL);
         die("Connection failed: " . $conn->connect_error);
     }
     // AGGIORNAMENTO FATTURA IN SQL
-    $sql = "UPDATE fatture
-            SET totFatt = ".$_POST["totFatt"].",
-            nFatt = ".$_POST["ndoc"].",
-            totFatt = ".$_POST["totFatt"].",
-            causale = ".$_POST["causale"].",
-            controparte = (SELECT idControp FROM controparti WHERE pIva = \"".$_POST["piva"]."\" OR codFisc = \"".$_POST["cf"]."\" OR ragSocControp = \"".$_POST["ragsoc"]."\" OR nomeControp = \"".$_POST["nome"]."\" OR cognControp = \"".$_POST["cognome"]."\"),\n";
-            if ($_POST["sezionale"] != "") { //aggiorna il sezionale
-              $sql .= "sezionale = (SELECT idSez FROM ditteSez WHERE codSezionale = ".$_POST["sezionale"]." AND codDitta = ".$_POST["ditta"]."),\n";
-            }
-            if ($_POST["ritAcc"] != "") { //aggiorna la ritenuta
-              $sql .= "importo_rit = ".$_POST["ritAcc"].",\n";
-            }
-            if ($_POST["datadoc"] != "") { //aggiorna la data
-              $sql .= "dataFatt = \"".$_POST["datadoc"]."\",\n";
-            }
+    $sql = "INSERT INTO controparti (personaFisica, ragSocControp, nomeControp, cognControp, codFisc, pIva, via, nCivico, CAP, citta, prov)
+            VALUES (".sqler($_POST["persFis"]).", ".sqler($_POST["ragsoc"]).", ".sqler($_POST["nome"]).", ".sqler($_POST["cognome"]).", ".sqler($_POST["cf"]).",
+                    ".sqler($_POST["piva"]).", ".sqler($_POST["via"]).", ".sqler($_POST["nCivico"]).", ".sqler($_POST["cap"]).", ".sqler($_POST["citta"]).", ".sqler($_POST["provincia"]).")
+            WHERE NOT EXISTS (SELECT idControp FROM controparti WHERE pIva = \"".$_POST["piva"]."\" OR codFisc = \"".$_POST["cf"]."\" OR ragSocControp = \"".$_POST["ragsoc"]."\" OR nomeControp = \"".$_POST["nome"]."\" OR cognControp = \"".$_POST["cognome"]."\");
+            UPDATE fatture
+            SET totFatt = ".sqler($_POST["totFatt"]).",
+            nFatt = ".sqler($_POST["ndoc"]).",
+            causale = ".sqler($_POST["causale"]).",
+            controparte = (SELECT idControp FROM controparti WHERE pIva = \"".$_POST["piva"]."\" OR codFisc = \"".$_POST["cf"]."\" OR ragSocControp = \"".$_POST["ragsoc"]."\" OR nomeControp = \"".$_POST["nome"]."\" OR cognControp = \"".$_POST["cognome"]."\"),
+            sezionale = (SELECT idSez FROM ditteSez WHERE codSezionale = ".sqler($_POST["sezionale"])." AND codDitta = ".$_POST["ditta"]."),
+            importo_rit = ".sqler($_POST["ritAcc"]).",
+            dataFatt = ".sqler($_POST["datadoc"]).",\n";
             for ($i = 1; $i <= 5; $i++) {
-              if ($_POST["sottoconto_$i"] != "") { //aggiorna i sottoconti
-                $sql .= "conto_$i = \"".$_POST["sottoconto_$i"]."\",\n";
-              }
-              if ($_POST["imponibile_$i"] != "") { //aggiorna gli imponibili
-                $sql .= "imponibile_$i = ".$_POST["imponibile_$i"].",\n";
-              }
-              if ($_POST["iva_$i"] != "") { //aggiorna le aliquote iva
-                $sql .= "aliquota_iva_$i = ".$_POST["iva_$i"].",\n";
-              }
-              if ($_POST["iva11_$i"] != "") { //aggiorna le iva 11
-                $sql .= "iva11_$i = ".$_POST["iva11_$i"].",\n";
-              }
-              if ($_POST["imposta_$i"] != "") { //aggiorna le imposte
-                $sql .= "imposta_$i = ".$_POST["imposta_$i"].",\n";
-              }
+            //aggiorna i sottoconti
+                $sql .= "conto_$i = ".sqler($_POST["sottoconto_$i"]).",\n";
+            //aggiorna gli imponibili
+                $sql .= "imponibile_$i = ".sqler($_POST["imponibile_$i"]).",\n";
+            //aggiorna le aliquote iva
+                $sql .= "aliquota_iva_$i = ".sqler($_POST["iva_$i"]).",\n";
+            //aggiorna le iva 11
+                $sql .= "iva11_$i = ".sqler($_POST["iva11_$i"]).",\n";
+            //aggiorna le imposte
+                $sql .= "imposta_$i = ".sqler($_POST["imposta_$i"]).",\n";
             }
     $sql .= "stato = \"Da registrare\"
             WHERE idFatt = ".$_POST["idDoc"];
-    $result = $conn->query($sql);
+    $result = $conn->multi_query($sql);
 
     error_log($sql);
     $conn->close();

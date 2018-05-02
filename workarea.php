@@ -94,6 +94,7 @@
 </body>
 <script>
 //observer per i campi
+/*
   //imponibile e imposta per calcolo residuo fattura
     document.getElementById("imponibile_1").addEventListener("focusout", residuo);
     document.getElementById("imponibile_2").addEventListener("focusout", residuo);
@@ -105,6 +106,7 @@
     document.getElementById("imposta_3").addEventListener("focusout", residuo);
     document.getElementById("imposta_4").addEventListener("focusout", residuo);
     document.getElementById("imposta_5").addEventListener("focusout", residuo);
+  */
   //pulsanti per scorporo
     document.getElementById("S_1").addEventListener("click", function() { scorpora(1) });
     document.getElementById("S_2").addEventListener("click", function() { scorpora(2) });
@@ -117,7 +119,20 @@
     $(document).ready(function () { determinaPersFis() })
   //filtra i sottoconti
     document.getElementById("sottoconti").addEventListener("keyup", function() { filterSottoconti() });
-
+  //trasforma il . in ,
+    document.getElementById("totFatt").addEventListener("keyup", function() { comma(document.getElementById("totFatt")) });
+    document.getElementById("ritAcc").addEventListener("keyup", function() { comma(document.getElementById("ritAcc")) });
+    document.getElementById("imponibile_1").addEventListener("keyup", function() { comma(document.getElementById("imponibile_1")) });
+    document.getElementById("imponibile_2").addEventListener("keyup", function() { comma(document.getElementById("imponibile_2")) });
+    document.getElementById("imponibile_3").addEventListener("keyup", function() { comma(document.getElementById("imponibile_3")) });
+    document.getElementById("imponibile_4").addEventListener("keyup", function() { comma(document.getElementById("imponibile_4")) });
+    document.getElementById("imponibile_5").addEventListener("keyup", function() { comma(document.getElementById("imponibile_5")) });
+    document.getElementById("imposta_1").addEventListener("keyup", function() { comma(document.getElementById("imposta_1")) });
+    document.getElementById("imposta_2").addEventListener("keyup", function() { comma(document.getElementById("imposta_2")) });
+    document.getElementById("imposta_3").addEventListener("keyup", function() { comma(document.getElementById("imposta_3")) });
+    document.getElementById("imposta_4").addEventListener("keyup", function() { comma(document.getElementById("imposta_4")) });
+    document.getElementById("imposta_5").addEventListener("keyup", function() { comma(document.getElementById("imposta_5")) });
+    
 //script per scorporo IVA per ogni riga
   function scorpora(riga) {
     var totale = document.getElementById("imponibile_"+ riga).value;
@@ -162,7 +177,7 @@
       document.getElementById("imponibile_1").value = totaleFatt;
     }
   }
-
+/*
 //calcola il residuo della fattura
   function residuo() {
     var totFatt = parseFloat(document.getElementById("totFatt").value);
@@ -196,7 +211,7 @@
         }
       }
     }
-
+*/
 //controlla la correttezza del codice fiscale
   function checkCF() {
     var cf = document.getElementById("cf").value;
@@ -346,7 +361,13 @@
     location.href = "#"
   }
 
-
+//trasforma il . in ,
+  function comma(element) {
+    var importo;
+    importo = element.value;
+    importo = importo.replace(",", ".");
+    element.value = importo;
+  }
 
 //funzioni per controllo CF e pIva
 function replaceCharAt(s, index, replacement) {
