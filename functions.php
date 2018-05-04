@@ -377,12 +377,11 @@ error_reporting(E_ALL);
              $fatture = array_filter($resultJSON["lista_documenti"]);
              foreach ($fatture as $doc) {
                // Inserisce una nuova riga per fattura nel DB
-               $sql = "INSERT INTO fatture (ditta, stato, dataFatt, totFatt, nFatt, idFIC)
-                       SELECT * FROM (SELECT ".$_POST["ditta"].", \"Nuovo\", STR_TO_DATE(\"".$doc['data']."\", \"%d/%m/%Y\"), ".$doc["importo_totale"].", ".$doc["descrizione"].", ".$doc["id"].") AS tmp
-                       WHERE NOT EXISTS (
-                         SELECT idFIC FROM fatture WHERE idFIC = ".$doc["id"]."
-                       )";
+              $sql = "INSERT INTO fatture (ditta, stato, dataFatt, totFatt, nFatt, idFIC)
+                      SELECT * FROM (SELECT ".$_POST["ditta"].", \"Nuovo\", STR_TO_DATE(".sqler($doc['data']).", \"%d/%m/%Y\"), ".sqler($doc["importo_totale"]).", ".sqler($doc["descrizione"]).", ".sqler($doc["id"]).") AS tmp
+                      WHERE NOT EXISTS (SELECT idFIC FROM fatture WHERE idFIC = ".$doc["id"].")";
                $result = $conn->query($sql);
+               error_log($sql);
                if (mysqli_affected_rows($conn)) {
                  $result = $conn->query("SELECT LAST_INSERT_ID()"); //ottiene l'ID dell'ultima fattura
                  if ($result->num_rows > 0) {
@@ -515,7 +514,7 @@ error_reporting(E_ALL);
 
         }
     } else {
-      print("nessun risultato");
+      print("La fattura non esiste");
     }
     $conn->close();
 
@@ -613,8 +612,9 @@ error_reporting(E_ALL);
     }
     // AGGIORNAMENTO FATTURA IN SQL
     $sql = "INSERT INTO controparti (personaFisica, ragSocControp, nomeControp, cognControp, codFisc, pIva, via, nCivico, CAP, citta, prov)
-            VALUES (".sqler($_POST["persFis"]).", ".sqler($_POST["ragsoc"]).", ".sqler($_POST["nome"]).", ".sqler($_POST["cognome"]).", ".sqler($_POST["cf"]).",
-                    ".sqler($_POST["piva"]).", ".sqler($_POST["via"]).", ".sqler($_POST["nCivico"]).", ".sqler($_POST["cap"]).", ".sqler($_POST["citta"]).", ".sqler($_POST["provincia"]).")
+            SELECT ".sqler($_POST["persFis"]).", ".sqler($_POST["ragsoc"]).", ".sqler($_POST["nome"]).", ".sqler($_POST["cognome"]).", ".sqler($_POST["cf"]).",
+                    ".sqler($_POST["piva"]).", ".sqler($_POST["via"]).", ".sqler($_POST["nCivico"]).", ".sqler($_POST["cap"]).", ".sqler($_POST["citta"]).", ".sqler($_POST["provincia"])."
+            FROM controparti
             WHERE NOT EXISTS (SELECT idControp FROM controparti WHERE pIva = \"".$_POST["piva"]."\" OR codFisc = \"".$_POST["cf"]."\" OR ragSocControp = \"".$_POST["ragsoc"]."\" OR nomeControp = \"".$_POST["nome"]."\" OR cognControp = \"".$_POST["cognome"]."\");
             UPDATE fatture
             SET totFatt = ".sqler($_POST["totFatt"]).",
@@ -646,6 +646,43 @@ error_reporting(E_ALL);
   }
 
   function approvaFatt() {
+    // Create connection
+    $conn = new mysqli(servername, username, password, dbname);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    // AGGIORNAMENTO FATTURA IN SQL
+    $sql = "INSERT INTO controparti (personaFisica, ragSocControp, nomeControp, cognControp, codFisc, pIva, via, nCivico, CAP, citta, prov)
+            SELECT ".sqler($_POST["persFis"]).", ".sqler($_POST["ragsoc"]).", ".sqler($_POST["nome"]).", ".sqler($_POST["cognome"]).", ".sqler($_POST["cf"]).",
+                    ".sqler($_POST["piva"]).", ".sqler($_POST["via"]).", ".sqler($_POST["nCivico"]).", ".sqler($_POST["cap"]).", ".sqler($_POST["citta"]).", ".sqler($_POST["provincia"])."
+            FROM controparti
+            WHERE NOT EXISTS (SELECT idControp FROM controparti WHERE pIva = \"".$_POST["piva"]."\" OR codFisc = \"".$_POST["cf"]."\" OR ragSocControp = \"".$_POST["ragsoc"]."\" OR nomeControp = \"".$_POST["nome"]."\" OR cognControp = \"".$_POST["cognome"]."\");
+            UPDATE fatture
+            SET totFatt = ".sqler($_POST["totFatt"]).",
+            nFatt = ".sqler($_POST["ndoc"]).",
+            causale = ".sqler($_POST["causale"]).",
+            controparte = (SELECT idControp FROM controparti WHERE pIva = \"".$_POST["piva"]."\" OR codFisc = \"".$_POST["cf"]."\" OR ragSocControp = \"".$_POST["ragsoc"]."\" OR nomeControp = \"".$_POST["nome"]."\" OR cognControp = \"".$_POST["cognome"]."\"),
+            sezionale = (SELECT idSez FROM ditteSez WHERE codSezionale = ".sqler($_POST["sezionale"])." AND codDitta = ".$_POST["ditta"]."),
+            importo_rit = ".sqler($_POST["ritAcc"]).",
+            dataFatt = ".sqler($_POST["datadoc"]).",\n";
+            for ($i = 1; $i <= 5; $i++) {
+            //aggiorna i sottoconti
+                $sql .= "conto_$i = ".sqler($_POST["sottoconto_$i"]).",\n";
+            //aggiorna gli imponibili
+                $sql .= "imponibile_$i = ".sqler($_POST["imponibile_$i"]).",\n";
+            //aggiorna le aliquote iva
+                $sql .= "aliquota_iva_$i = ".sqler($_POST["iva_$i"]).",\n";
+            //aggiorna le iva 11
+                $sql .= "iva11_$i = ".sqler($_POST["iva11_$i"]).",\n";
+            //aggiorna le imposte
+                $sql .= "imposta_$i = ".sqler($_POST["imposta_$i"]).",\n";
+            }
+    $sql .= "stato = \"Registrato\"
+            WHERE idFatt = ".$_POST["idDoc"];
+    $result = $conn->multi_query($sql);
+    error_log($sql);
+    $conn->close();
     header("location: /acquistiincloud/docs.php");
   }
 
