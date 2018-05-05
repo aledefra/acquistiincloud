@@ -41,31 +41,44 @@
     loadWorkArea($_GET['idDoc']);
   ?>
 
-  <div id="popupSez" class="overlay">
-    <div class="popup">
-    <br><br>
-    <table id="tableSezionali">
-    <tr>
-      <th>Codice</th>
-      <th>Descrizione</th>
-      <th></th>
-    </tr>
-      <?php
-        sezionaliToTable($_GET["ditta"]);
-      ?>
-    </table>
-    <a class="close" href="#">&times;</a>
+
+  <div id="popupSez" data-izimodal-group="grupo1" data-izimodal-fullscreen="true" aria-hidden="false" aria-labelledby="modal-large" role="dialog" class="iziModal hasScroll hasShadow isAttached overlay" style="z-index: 999; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; border-bottom-width: 3px; border-bottom-style: solid; border-bottom-color: rgb(136, 160, 185); overflow: hidden; max-width: 700px; display: block; height: 40vh;">
+  <div class="iziModal-header iziModal-noSubtitle" style="background-color: rgb(136, 160, 185); padding-right: 70px; background-position: initial initial; background-repeat: initial initial;">
+    <i class="iziModal-header-icon icon-chat" style="color: white;"></i>
+    <h2 class="iziModal-header-title">Sezionali</h2>
+    <p class="iziModal-header-subtitle"></p>
+    <div class="iziModal-header-buttons">
+      <a href="#" class="iziModal-button iziModal-button-close" data-izimodal-close=""></a>
+    </div>
+  </div>
+  <div class="iziModal-wrap" style="height: 35vh;">
+    <div class="iziModal-content" style="padding: 20px;">
+      <table id="tableSezionali">
+      <tr>
+        <th>Codice</th>
+        <th>Descrizione</th>
+        <th></th>
+      </tr>
+        <?php
+          sezionaliToTable($_GET["ditta"]);
+        ?>
+      </table>
+      </div>
     </div>
   </div>
 
-
-
-  <div id="popupIva" class="iziModal hasScroll hasShadow isAttached overlay" data-izimodal-group="grupo1" data-izimodal-fullscreen="true" aria-hidden="false" aria-labelledby="modal-large" role="dialog" class="iziModal hasScroll hasShadow isAttached overlay" style="z-index: 999; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; border-bottom-width: 3px; border-bottom-style: solid; border-bottom-color: rgb(136, 160, 185); overflow: hidden; max-width: 700px; display: block; height: 438px;">
-
-    <br><br>
-    <input type="text" id="iva" placeholder="Cerca l'IVA" title="Cerca l'IVA">
-    <div class="iziModal-wrap" style="height: 390px;">
-      <div class="iziModal-content" style="padding: 20px;">
+  <div id="popupIva" data-izimodal-group="grupo1" data-izimodal-fullscreen="true" aria-hidden="false" aria-labelledby="modal-large" role="dialog" class="iziModal hasScroll hasShadow isAttached overlay" style="z-index: 999; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; border-bottom-width: 3px; border-bottom-style: solid; border-bottom-color: rgb(136, 160, 185); overflow: hidden; max-width: 700px; display: block; height: 80vh;">
+  <div class="iziModal-header iziModal-noSubtitle" style="background-color: rgb(136, 160, 185); padding-right: 70px; background-position: initial initial; background-repeat: initial initial;">
+    <i class="iziModal-header-icon icon-chat" style="color: white;"></i>
+    <h2 class="iziModal-header-title">Codici IVA</h2>
+    <p class="iziModal-header-subtitle"></p>
+    <div class="iziModal-header-buttons">
+      <a href="#" class="iziModal-button iziModal-button-close" data-izimodal-close=""></a>
+    </div>
+  </div>
+  <div class="iziModal-wrap" style="height: 75vh;">
+    <div class="iziModal-content" style="padding: 20px; background: #fff;">
+      <input type="text" id="filterIVA" placeholder="Cerca l'aliquota IVA" title="Cerca l'aliquota IVA">
       <table id="tableIva">
         <tr>
           <th>Codice</th>
@@ -76,10 +89,8 @@
             IVAToTable();
           ?>
       </table>
-        <a class="close" href="#">&times;</a>
+      </div>
     </div>
-  </div>
-
   </div>
 
   <div id="popupConto" data-izimodal-group="grupo1" data-izimodal-fullscreen="true" aria-hidden="false" aria-labelledby="modal-large" role="dialog" class="iziModal hasScroll hasShadow isAttached overlay" style="z-index: 999; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; border-bottom-width: 3px; border-bottom-style: solid; border-bottom-color: rgb(136, 160, 185); overflow: hidden; max-width: 700px; display: block; height: 80vh;">
@@ -92,7 +103,7 @@
     </div>
   </div>
   <div class="iziModal-wrap" style="height: 75vh;">
-    <div class="iziModal-content" style="padding: 20px;">
+    <div class="iziModal-content" style="padding: 20px; background: #fff;">
       <input type="text" id="sottoconti" placeholder="Cerca il sottoconto" title="Cerca il sottoconto">
         <table id="tableSottoconti">
         <tr>

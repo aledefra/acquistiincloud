@@ -89,7 +89,7 @@ body {
 
 /* filtri workarea */
 
-#sottoconti {
+#filterIVA, #sottoconti {
   background-image: url('https://www.w3schools.com/css/searchicon.png');
   background-position: 10px 12px;
   background-repeat: no-repeat;
@@ -100,16 +100,6 @@ body {
   margin-bottom: 12px;
 }
 
-#iva {
-  background-image: url('https://www.w3schools.com/css/searchicon.png');
-  background-position: 10px 12px;
-  background-repeat: no-repeat;
-  width: 50%;
-  font-size: 16px;
-  padding: 12px 20px 12px 40px;
-  border: 1px solid #ddd;
-  margin-bottom: 12px;
-}
 /* Barra di navigazione */
 
 .navbar {
