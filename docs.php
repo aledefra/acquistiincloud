@@ -98,6 +98,7 @@
           <label>Data a:</label> <input id="dataa" type="date">
         </div>
         <input type="submit" value="Filtra" class="submitbtn" onclick="filtra()">
+        <input type="submit" value="Reset" class="resetbtn" onclick="reset()">
     </div>
 </div>
 

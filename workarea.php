@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 <html>
-<style>
-@import url(docs.css);
-</style>
 <head>
 
 <meta charset="UTF-8">
@@ -24,6 +21,12 @@
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="js/iziModal.js"></script>
+  <script src="js/iziModal.min.js"></script>
+  <style>
+  @import url(docs.css);
+  @import url(css/iziModal.css);
+  </style>
   <script src="index.js"></script>
   <link rel="icon" type="image/png" href="/acquistiincloud/images/favicon.png">
 
@@ -55,41 +58,56 @@
     </div>
   </div>
 
-  <div id="popupConto" class="overlay">
-    <div class="popup">
+
+
+  <div id="popupIva" class="iziModal hasScroll hasShadow isAttached overlay" data-izimodal-group="grupo1" data-izimodal-fullscreen="true" aria-hidden="false" aria-labelledby="modal-large" role="dialog" class="iziModal hasScroll hasShadow isAttached overlay" style="z-index: 999; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; border-bottom-width: 3px; border-bottom-style: solid; border-bottom-color: rgb(136, 160, 185); overflow: hidden; max-width: 700px; display: block; height: 438px;">
+
     <br><br>
-    <input type="text" id="sottoconti" placeholder="Cerca il sottoconto" title="Cerca il sottoconto">
-      <table id="tableSottoconti">
-      <tr>
-        <th>Codice</th>
-        <th>Descrizione</th>
-        <th></th>
-      </tr>
-        <?php
-          sottocontiToTable();
-        ?>
+    <input type="text" id="iva" placeholder="Cerca l'IVA" title="Cerca l'IVA">
+    <div class="iziModal-wrap" style="height: 390px;">
+      <div class="iziModal-content" style="padding: 20px;">
+      <table id="tableIva">
+        <tr>
+          <th>Codice</th>
+          <th>Descrizione</th>
+          <th></th>
+        </tr>
+          <?php
+            IVAToTable();
+          ?>
       </table>
-      <a class="close" href="#">&times;</a>
+        <a class="close" href="#">&times;</a>
     </div>
   </div>
 
-  <div id="popupIva" class="overlay">
-    <div class="popup">
-    <br><br>
-    <input type="text" id="iva" placeholder="Cerca l'IVA" title="Cerca l'IVA">
-      <table id="tableIva">
-      <tr>
-        <th>Codice</th>
-        <th>Descrizione</th>
-        <th></th>
-      </tr>
-        <?php
-          IVAToTable();
-        ?>
-      </table>
-      <a class="close" href="#">&times;</a>
+  </div>
+
+  <div id="popupConto" data-izimodal-group="grupo1" data-izimodal-fullscreen="true" aria-hidden="false" aria-labelledby="modal-large" role="dialog" class="iziModal hasScroll hasShadow isAttached overlay" style="z-index: 999; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; border-bottom-width: 3px; border-bottom-style: solid; border-bottom-color: rgb(136, 160, 185); overflow: hidden; max-width: 700px; display: block; height: 80vh;">
+  <div class="iziModal-header iziModal-noSubtitle" style="background-color: rgb(136, 160, 185); padding-right: 70px; background-position: initial initial; background-repeat: initial initial;">
+    <i class="iziModal-header-icon icon-chat" style="color: white;"></i>
+    <h2 class="iziModal-header-title">Sottoconto</h2>
+    <p class="iziModal-header-subtitle"></p>
+    <div class="iziModal-header-buttons">
+      <a href="#" class="iziModal-button iziModal-button-close" data-izimodal-close=""></a>
     </div>
   </div>
+  <div class="iziModal-wrap" style="height: 75vh;">
+    <div class="iziModal-content" style="padding: 20px;">
+      <input type="text" id="sottoconti" placeholder="Cerca il sottoconto" title="Cerca il sottoconto">
+        <table id="tableSottoconti">
+        <tr>
+          <th>Codice</th>
+          <th>Descrizione</th>
+          <th></th>
+        </tr>
+          <?php
+            sottocontiToTable();
+          ?>
+        </table>
+      </div>
+    </div>
+  </div>
+
 
 </body>
 <script>
@@ -132,7 +150,7 @@
     document.getElementById("imposta_3").addEventListener("keyup", function() { comma(document.getElementById("imposta_3")) });
     document.getElementById("imposta_4").addEventListener("keyup", function() { comma(document.getElementById("imposta_4")) });
     document.getElementById("imposta_5").addEventListener("keyup", function() { comma(document.getElementById("imposta_5")) });
-    
+
 //script per scorporo IVA per ogni riga
   function scorpora(riga) {
     var totale = document.getElementById("imponibile_"+ riga).value;

@@ -514,7 +514,7 @@ error_reporting(E_ALL);
 
         }
     } else {
-      print("La fattura non esiste");
+      print("<h1>La fattura non esiste</h1>");
     }
     $conn->close();
 

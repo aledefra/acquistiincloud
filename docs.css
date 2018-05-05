@@ -118,6 +118,7 @@ body {
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 10;
 }
 
 .navbar a {
@@ -354,7 +355,8 @@ tr:nth-child(even) {
 .div-filterfull {
   height:10%;
   width: 100%;
-  position: relative;
+  display:block;
+  position:static;
   text-align: left;
 }
 
@@ -483,6 +485,33 @@ tr:nth-child(even) {
     cursor: pointer;
 }
 
+.resetbtn {
+    width: 10%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 1%;
+    margin-bottom: 16px;
+    margin-left: 88%;
+    resize: vertical;
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
 .submitbtn:hover {
     background-color: #45a049;
+}
+
+.resetbtn:hover {
+    background-color: #45a049;
+}
+
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
 }
