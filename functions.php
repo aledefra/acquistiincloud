@@ -360,7 +360,7 @@ error_reporting(E_ALL);
       // output data of each row
       while($row = $resultSQL->fetch_assoc()) {
         if ($row["apiUid"]) {
-          $url = "https://api.fattureincloud.it/v1/acquisti/lista";
+           $url = "https://api.fattureincloud.it/v1/acquisti/lista";
            $request = array("api_uid" => $row["apiUid"], "api_key" => $row["apiKey"], "anno" => "2018", "mostra_link_allegato" => "true");
            $options = array(
                "http" => array(
@@ -371,14 +371,16 @@ error_reporting(E_ALL);
            );
            $context  = stream_context_create($options);
            $resultJSON = json_decode(file_get_contents($url, false, $context), true);
-           print($resultJSON);
            if ($resultJSON["success"]) {
              //filtra i documenti prelevati
              $fatture = array_filter($resultJSON["lista_documenti"]);
              foreach ($fatture as $doc) {
                // Inserisce una nuova riga per fattura nel DB
-              $sql = "INSERT INTO fatture (ditta, stato, dataFatt, totFatt, nFatt, idFIC)
-                      SELECT * FROM (SELECT ".$_POST["ditta"].", \"Nuovo\", STR_TO_DATE(".sqler($doc['data']).", \"%d/%m/%Y\"), ".sqler($doc["importo_totale"]).", ".sqler($doc["descrizione"]).", ".sqler($doc["id"]).") AS tmp
+               $anagrafica = APIFornitori($row["apiUid"], $row["apiKey"], $doc["id_fornitore"]);
+               $sql = "INSERT INTO fatture (ditta, stato, dataFatt, totFatt, nFatt, controparte, idFIC)
+                      SELECT * FROM (SELECT ".$_POST["ditta"].", \"Nuovo\", STR_TO_DATE(".sqler($doc['data']).", \"%d/%m/%Y\"), ".sqler($doc["importo_totale"]).", ".sqler($doc["descrizione"]).",
+                      (SELECT idControp FROM controparti WHERE pIva = ".sqler($anagrafica["piva"])." OR codFisc = ".sqler($anagrafica["cf"])." OR ragSocControp = ".sqler($anagrafica["nome"]).")
+                      ,".sqler($doc["id"]).") AS tmp
                       WHERE NOT EXISTS (SELECT idFIC FROM fatture WHERE idFIC = ".$doc["id"].")";
                $result = $conn->query($sql);
                error_log($sql);
@@ -404,6 +406,38 @@ error_reporting(E_ALL);
     $conn->close();
     header("location: /acquistiincloud/docs.php");
    }
+  }
+
+  function APIFornitori($APIuid, $APIkey, $idFornitore) {
+    $url = "https://api.fattureincloud.it:443/v1/fornitori/lista";
+    $request = array("api_uid" => $APIuid, "api_key" => $APIkey, "id" => $idFornitore);
+    $options = array(
+        "http" => array(
+            "header"  => "Content-type: text/json\r\n",
+            "method"  => "POST",
+            "content" => json_encode($request)
+        ),
+    );
+    $context  = stream_context_create($options);
+    $resultJSON = json_decode(file_get_contents($url, false, $context), true);
+    if ($resultJSON["success"]) {
+      //filtra i documenti prelevati
+      $anagrafica = array_filter($resultJSON["lista_fornitori"][0]);
+      // Create connection
+      $conn = new mysqli(servername, username, password, dbname);
+      // Check connection
+      if ($conn->connect_error) {
+      die("Connection failed: " . $conn->connect_error);
+      }
+      $sql = "INSERT INTO controparti (ragSocControp, codFisc, pIva, via, CAP, citta, prov)
+              SELECT ".sqler($anagrafica["nome"]).", ".sqler($anagrafica["cf"]).", ".sqler($anagrafica["piva"]).",
+              ".sqler($anagrafica["indirizzo_via"]).", ".sqler($anagrafica["indirizzo_cap"]).", ".sqler($anagrafica["indirizzo_citta"]).", ".sqler($anagrafica["indirizzo_provincia"])."
+              FROM controparti
+              WHERE NOT EXISTS (SELECT idControp FROM controparti WHERE pIva = \"".$anagrafica["piva"]."\" OR codFisc = \"".$anagrafica["cf"]."\" OR ragSocControp = \"".$anagrafica["nome"]."\")";
+      $result = $conn->query($sql);
+      error_log($sql);
+      return $anagrafica;
+    }
   }
 
   function loadWorkArea($docID) {
@@ -686,5 +720,80 @@ error_reporting(E_ALL);
     header("location: /acquistiincloud/docs.php");
   }
 
+function navbar() {
+  print('
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark" style="margin-bottom: 20px;">
+    <a class="navbar-brand" href="docs.php">
+      <img src="images/favicon.png" href="docs.php" width="30" height="30" class="d-inline-block align-top" alt="">
+      Acquisti in Cloud
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item" id="navbar-uploadPDF">
+          <a class="nav-link" href="uploadPDF.php">Carica Fatture<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item" id="navbar-downFIC">
+          <a class="nav-link" href="downFIC.php">Scarica Fatture da FIC</a>
+        </li>
+        <li class="nav-item" id="navbar-registra">
+          <a class="nav-link" href="registra.php">Registra</a>
+        </li>
+      </ul>
+    </div>
+  </nav>');
+}
 
+function footer(){
+  print('
+<!--Footer-->
+<footer class="page-footer font-small blue pt-4 mt-4">
+
+    <!--Footer Links-->
+    <div class="container-fluid text-center text-md-left">
+        <div class="row">
+
+            <!--First column-->
+            <div class="col-md-6">
+                <h5 class="text-uppercase">Footer Content</h5>
+                <p>Here you can use rows and columns here to organize your footer content.</p>
+            </div>
+            <!--/.First column-->
+
+            <!--Second column-->
+            <div class="col-md-6">
+                <h5 class="text-uppercase">Links</h5>
+                <ul class="list-unstyled">
+                    <li>
+                        <a href="#!">Link 1</a>
+                    </li>
+                    <li>
+                        <a href="#!">Link 2</a>
+                    </li>
+                    <li>
+                        <a href="#!">Link 3</a>
+                    </li>
+                    <li>
+                        <a href="#!">Link 4</a>
+                    </li>
+                </ul>
+            </div>
+            <!--/.Second column-->
+        </div>
+    </div>
+    <!--/.Footer Links-->
+
+    <!--Copyright-->
+    <div class="footer-copyright py-3 text-center">
+        © 2018 Copyright:
+        <a href="https://mdbootstrap.com/material-design-for-bootstrap/"> MDBootstrap.com </a>
+    </div>
+    <!--/.Copyright-->
+
+</footer>
+<!--/.Footer-->
+                      ');
+}
 ?>
