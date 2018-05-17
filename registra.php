@@ -37,16 +37,18 @@
 <body class="topmarg">
 
   <form action ="<?php registraFatt(); ?>" method="post" enctype="multipart/form-data">
-<p>Ditta: </p><span class="select-wrapper">
-  <select name="ditta" class="custom-select">
+Ditta:  <select name="ditta">
 <?php
 retrieveDitteForDropdown();
 ?>
  </select>
-</span><br><br>
+<br><br>
 
       Data di registrazione: <input type="date" name="datareg">
-      <br><input type="submit" value="Registra Fatture" name="submit">
+      <br><br>
+      Documenti fino al: <input type="date" name="docfino">
+      <br><br>
+      <input type="submit" value="Registra Fatture" name="submit">
   </form>
 
 </body>

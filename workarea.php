@@ -18,7 +18,6 @@
 
   </div>
 
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="js/iziModal.js"></script>
@@ -40,7 +39,11 @@
   <?php
     loadWorkArea($_GET['idDoc']);
   ?>
-
+  <?php
+    if (isset($_GET['error'])) {
+      print("<script>alert(\"".$_GET['error']."\");</script>");
+    }
+  ?>
 
   <div id="popupSez" data-izimodal-group="grupo1" data-izimodal-fullscreen="true" aria-hidden="false" aria-labelledby="modal-large" role="dialog" class="iziModal hasScroll hasShadow isAttached overlay" style="z-index: 999; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; border-bottom-width: 3px; border-bottom-style: solid; border-bottom-color: rgb(136, 160, 185); overflow: hidden; max-width: 700px; display: block; height: 40vh;">
   <div class="iziModal-header iziModal-noSubtitle" style="background-color: rgb(136, 160, 185); padding-right: 70px; background-position: initial initial; background-repeat: initial initial;">
@@ -145,7 +148,12 @@
   //codice fiscale e P.IVA per determinare se è persona persona fisica
     document.getElementById("cf").addEventListener("focusout", function() { determinaPersFis(); checkCF() });
     document.getElementById("piva").addEventListener("focusout", function() { determinaPersFis(); checkPIVA() });
-    $(document).ready(function () { determinaPersFis() })
+    $(document).ready(function () { determinaPersFis(); retrieveAnagrafica(); })
+
+  //per fare retrieve delle anagrafiche
+    document.getElementById("piva").addEventListener("keyup", function() { retrieveAnagrafica("piva"); });
+    document.getElementById("cf").addEventListener("keyup", function() { retrieveAnagrafica("cf"); });
+
   //filtra i sottoconti
     document.getElementById("sottoconti").addEventListener("keyup", function() { filterSottoconti() });
   //trasforma il . in ,
@@ -425,6 +433,19 @@ function cleanCF(cod, allowPrefix) {
   return prefix + newCod.replace(/\W/g,'');
 }
 
+function retrieveAnagrafica(perCampo) {
+  var campo = document.getElementById(perCampo).value;
+  var ajax = new XMLHttpRequest();
+  ajax.open("GET", "retrieveAnagrafica.php?"+perCampo+"="+campo, true);
+  //sending http request
+  ajax.send();
+  //receiving response
+  ajax.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById(perCampo+"s").innerHTML = this.responseText;
+    }
+  }
+}
 
 </script>
 </html>

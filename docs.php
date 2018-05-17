@@ -41,7 +41,7 @@
 </head>
 <body class="topmarg">
 
-  <div class="navbar">
+  <div class="navbar" href="#top">
     <a class="active" href="docs.php"><strong>Acquisti </strong>in <strong>Cloud</strong></a>
     <a class="reg-right" href="registra.php">Registra</a>
     <a class="reg-right" href="downFIC.php">Scarica fatture da FIC</a>
@@ -121,8 +121,6 @@
       creaRigaFatt();
     ?>
   </table>
-</div>
-</div>
 </body>
 <script>
 //script per filtri
@@ -169,6 +167,22 @@
       filter = document.getElementById("daregistrare").checked;
     }
   }
-
+//script per resettare i filtri
+  function reset() {
+    document.getElementById("daregistrare").checked = true;
+    document.getElementById("nuovo").checked = true;
+    document.getElementById("registrato").checked = true;
+    document.getElementById("rifiutato").checked = true;
+    document.getElementById("contabilizzato").checked = true;
+    document.getElementById("ditta").value = "";
+    document.getElementById("controparte").value = "";
+    document.getElementById("causale").value = "";
+    document.getElementById("controparte").value = "";
+    document.getElementById("numero").value = "";
+    document.getElementById("protocollo").value = "";
+    document.getElementById("datada").value = "";
+    document.getElementById("dataa").value = "";
+    this.filtra();
+  }
 </script>
 </html>
