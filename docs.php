@@ -121,6 +121,12 @@
       creaRigaFatt();
     ?>
   </table>
+<<<<<<< HEAD
+=======
+</div>
+</div>
+<a href="#top">Top</a>
+>>>>>>> 5833f6b0efc02e7069fda8b7d981fc60fcf48872
 </body>
 <script>
 //script per filtri

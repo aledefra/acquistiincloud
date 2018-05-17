@@ -417,7 +417,10 @@ error_reporting(E_ALL);
             "content" => json_encode($request)
         ),
     );
+<<<<<<< HEAD
 	 error_log(json_encode($request));
+=======
+>>>>>>> 5833f6b0efc02e7069fda8b7d981fc60fcf48872
     $context  = stream_context_create($options);
     $resultJSON = json_decode(file_get_contents($url, false, $context), true);
     if ($resultJSON["success"]) {
@@ -432,7 +435,11 @@ error_reporting(E_ALL);
       $sql = "INSERT INTO controparti (ragSocControp, codFisc, pIva, via, CAP, citta, prov)
               SELECT ".sqler($anagrafica["nome"]).", ".sqler($anagrafica["cf"]).", ".sqler($anagrafica["piva"]).",
               ".sqler($anagrafica["indirizzo_via"]).", ".sqler($anagrafica["indirizzo_cap"]).", ".sqler($anagrafica["indirizzo_citta"]).", ".sqler($anagrafica["indirizzo_provincia"])."
+<<<<<<< HEAD
               FROM DUAL
+=======
+              FROM controparti
+>>>>>>> 5833f6b0efc02e7069fda8b7d981fc60fcf48872
               WHERE NOT EXISTS (SELECT idControp FROM controparti WHERE pIva = \"".$anagrafica["piva"]."\" OR codFisc = \"".$anagrafica["cf"]."\" OR ragSocControp = \"".$anagrafica["nome"]."\")";
       $result = $conn->query($sql);
       error_log($sql);
@@ -881,6 +888,7 @@ error_reporting(E_ALL);
     header("location: /acquistiincloud/docs.php");
   }
 
+<<<<<<< HEAD
   function retrieveAnagraficaFromPIVA() {
     // Create connection
     $conn = new mysqli(servername, username, password, dbname);
@@ -916,5 +924,82 @@ error_reporting(E_ALL);
       }
     }
   }
+=======
+function navbar() {
+  print('
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark" style="margin-bottom: 20px;">
+    <a class="navbar-brand" href="docs.php">
+      <img src="images/favicon.png" href="docs.php" width="30" height="30" class="d-inline-block align-top" alt="">
+      Acquisti in Cloud
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item" id="navbar-uploadPDF">
+          <a class="nav-link" href="uploadPDF.php">Carica Fatture<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item" id="navbar-downFIC">
+          <a class="nav-link" href="downFIC.php">Scarica Fatture da FIC</a>
+        </li>
+        <li class="nav-item" id="navbar-registra">
+          <a class="nav-link" href="registra.php">Registra</a>
+        </li>
+      </ul>
+    </div>
+  </nav>');
+}
 
+function footer(){
+  print('
+<!--Footer-->
+<footer class="page-footer font-small blue pt-4 mt-4">
+
+    <!--Footer Links-->
+    <div class="container-fluid text-center text-md-left">
+        <div class="row">
+
+            <!--First column-->
+            <div class="col-md-6">
+                <h5 class="text-uppercase">Footer Content</h5>
+                <p>Here you can use rows and columns here to organize your footer content.</p>
+            </div>
+            <!--/.First column-->
+
+            <!--Second column-->
+            <div class="col-md-6">
+                <h5 class="text-uppercase">Links</h5>
+                <ul class="list-unstyled">
+                    <li>
+                        <a href="#!">Link 1</a>
+                    </li>
+                    <li>
+                        <a href="#!">Link 2</a>
+                    </li>
+                    <li>
+                        <a href="#!">Link 3</a>
+                    </li>
+                    <li>
+                        <a href="#!">Link 4</a>
+                    </li>
+                </ul>
+            </div>
+            <!--/.Second column-->
+        </div>
+    </div>
+    <!--/.Footer Links-->
+
+    <!--Copyright-->
+    <div class="footer-copyright py-3 text-center">
+        © 2018 Copyright:
+        <a href="https://mdbootstrap.com/material-design-for-bootstrap/"> MDBootstrap.com </a>
+    </div>
+    <!--/.Copyright-->
+>>>>>>> 5833f6b0efc02e7069fda8b7d981fc60fcf48872
+
+</footer>
+<!--/.Footer-->
+                      ');
+}
 ?>
