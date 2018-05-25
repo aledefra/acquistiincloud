@@ -146,14 +146,14 @@
     document.getElementById("S_4").addEventListener("click", function() { scorpora(4) });
     document.getElementById("S_5").addEventListener("click", function() { scorpora(5) });
   //codice fiscale e P.IVA per determinare se è persona persona fisica
-    document.getElementById("cf").addEventListener("focusout", function() { determinaPersFis(); checkCF() });
-    document.getElementById("piva").addEventListener("focusout", function() { determinaPersFis(); checkPIVA() });
+    document.getElementById("cf").addEventListener("focusout", function() { determinaPersFis(); checkCF(); getAnagrafica("cf"); });
+    document.getElementById("piva").addEventListener("focusout", function() { determinaPersFis(); checkPIVA(); getAnagrafica("piva"); });
     $(document).ready(function () { determinaPersFis(); retrieveAnagrafica(); })
 
   //per fare retrieve delle anagrafiche
     document.getElementById("piva").addEventListener("keyup", function() { retrieveAnagrafica("piva"); });
     document.getElementById("cf").addEventListener("keyup", function() { retrieveAnagrafica("cf"); });
-
+	
   //filtra i sottoconti
     document.getElementById("sottoconti").addEventListener("keyup", function() { filterSottoconti() });
   //trasforma il . in ,
@@ -446,6 +446,29 @@ function retrieveAnagrafica(perCampo) {
     }
   }
 }
+	
+	function getAnagrafica(perCampo) {
+		var campo = document.getElementById(perCampo).value;
+		var ajax = new XMLHttpRequest();
+		console.log(campo)
+		ajax.open("GET", "getAnagrafica.php?"+perCampo+"="+campo, true);
+		ajax.send();
+		ajax.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var anagrafica = JSON.parse(this.responseText)
+				document.getElementById("cf").value = anagrafica.cf
+				document.getElementById("piva").value = anagrafica.pIva
+				document.getElementById("nome").value = anagrafica.nome
+				document.getElementById("cognome").value = anagrafica.cognome
+				document.getElementById("ragsoc").value = anagrafica.ragSoc
+				document.getElementById("via").value = anagrafica.via
+				document.getElementById("nCivico").value = anagrafica.nCivico
+				document.getElementById("cap").value = anagrafica.CAP
+				document.getElementById("citta").value = anagrafica.citta
+				document.getElementById("provincia").value = anagrafica.provincia
+			}
+		}
+	}
 
 </script>
 </html>

@@ -39,7 +39,6 @@
       </form>
     </div>
   </div>
-  <?php footer(); ?>
 </body>
 <script>
   //imposta la classe esatta per la navbar

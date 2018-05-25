@@ -4,6 +4,8 @@ define('servername', 'localhost');
 define('username', 'root');
 define('password', 'root');
 define('dbname', 'AIC');
+//no time limit
+set_time_limit(0);
 /* PER DEBUG */
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
@@ -347,6 +349,7 @@ error_reporting(E_ALL);
 
   function downloadFromFIC() {
     if (isset($_POST['submit'])) {
+		 error_log("inizio importazione");
     // Create connection
     $conn = new mysqli(servername, username, password, dbname);
     // Check connection
@@ -374,6 +377,7 @@ error_reporting(E_ALL);
              //filtra i documenti prelevati
              $fatture = array_filter($resultJSON["lista_documenti"]);
              foreach ($fatture as $doc) {
+					 sleep(10);
                // Inserisce una nuova riga per fattura nel DB
                $anagrafica = APIFornitori($row["apiUid"], $row["apiKey"], $doc["id_fornitore"]);
                $sql = "INSERT INTO fatture (ditta, stato, dataFatt, totFatt, nFatt, controparte, idFIC)
@@ -402,6 +406,7 @@ error_reporting(E_ALL);
     } else {
       print("errore");
     }
+		 error_log("fine importazione");
     $conn->close();
     header("location: /acquistiincloud/docs.php");
    }
@@ -417,10 +422,7 @@ error_reporting(E_ALL);
             "content" => json_encode($request)
         ),
     );
-<<<<<<< HEAD
 	 error_log(json_encode($request));
-=======
->>>>>>> 5833f6b0efc02e7069fda8b7d981fc60fcf48872
     $context  = stream_context_create($options);
     $resultJSON = json_decode(file_get_contents($url, false, $context), true);
     if ($resultJSON["success"]) {
@@ -432,15 +434,8 @@ error_reporting(E_ALL);
       if ($conn->connect_error) {
       die("Connection failed: " . $conn->connect_error);
       }
-      $sql = "INSERT INTO controparti (ragSocControp, codFisc, pIva, via, CAP, citta, prov)
-              SELECT ".sqler($anagrafica["nome"]).", ".sqler($anagrafica["cf"]).", ".sqler($anagrafica["piva"]).",
-              ".sqler($anagrafica["indirizzo_via"]).", ".sqler($anagrafica["indirizzo_cap"]).", ".sqler($anagrafica["indirizzo_citta"]).", ".sqler($anagrafica["indirizzo_provincia"])."
-<<<<<<< HEAD
-              FROM DUAL
-=======
-              FROM controparti
->>>>>>> 5833f6b0efc02e7069fda8b7d981fc60fcf48872
-              WHERE NOT EXISTS (SELECT idControp FROM controparti WHERE pIva = \"".$anagrafica["piva"]."\" OR codFisc = \"".$anagrafica["cf"]."\" OR ragSocControp = \"".$anagrafica["nome"]."\")";
+      $sql = "
+		CALL aggiornaAnag(".sqler($anagrafica["piva"]).", ".sqler($anagrafica["cf"]).", ".sqler($anagrafica["nome"]).", ".sqler($anagrafica["nome"]).", ".sqler($anagrafica["nome"]).", '', ".sqler($anagrafica["indirizzo_via"]).", '', ".sqler($anagrafica["indirizzo_cap"]).", ".sqler($anagrafica["indirizzo_citta"]).", ".sqler($anagrafica["indirizzo_provincia"]).")";
       $result = $conn->query($sql);
       error_log($sql);
       return $anagrafica;
@@ -752,11 +747,7 @@ error_reporting(E_ALL);
         die("Connection failed: " . $conn->connect_error);
     }
     // AGGIORNAMENTO FATTURA IN SQL
-    $sql = "INSERT INTO controparti (personaFisica, ragSocControp, nomeControp, cognControp, codFisc, pIva, via, nCivico, CAP, citta, prov)
-            SELECT ".sqler($_POST["persFis"]).", ".sqler($_POST["ragsoc"]).", ".sqler($_POST["nome"]).", ".sqler($_POST["cognome"]).", ".sqler($_POST["cf"]).",
-                    ".sqler($_POST["piva"]).", ".sqler($_POST["via"]).", ".sqler($_POST["nCivico"]).", ".sqler($_POST["cap"]).", ".sqler($_POST["citta"]).", ".sqler($_POST["provincia"])."
-            FROM DUAL
-            WHERE NOT EXISTS (SELECT idControp FROM controparti WHERE pIva = \"".$_POST["piva"]."\" OR codFisc = \"".$_POST["cf"]."\" OR ragSocControp = \"".$_POST["ragsoc"]."\" OR nomeControp = \"".$_POST["nome"]."\" OR cognControp = \"".$_POST["cognome"]."\");
+    $sql = "CALL aggiornaAnag(".sqler($_POST["piva"]).", ".sqler($_POST["cf"]).", ".sqler($_POST["ragsoc"]).", ".sqler($_POST["nome"]).", ".sqler($_POST["cognome"]).", ".sqler($_POST["persFis"]).", ".sqler($_POST["via"]).", ".sqler($_POST["nCivico"]).", ".sqler($_POST["cap"]).", ".sqler($_POST["citta"]).", ".sqler($_POST["provincia"]).");
             UPDATE fatture
             SET totFatt = ".sqler($_POST["totFatt"]).",
             nFatt = ".sqler($_POST["ndoc"]).",
@@ -855,11 +846,8 @@ error_reporting(E_ALL);
     }
 
     // AGGIORNAMENTO FATTURA IN SQL
-    $sql = "INSERT INTO controparti (personaFisica, ragSocControp, nomeControp, cognControp, codFisc, pIva, via, nCivico, CAP, citta, prov)
-            SELECT ".sqler($_POST["persFis"]).", ".sqler($_POST["ragsoc"]).", ".sqler($_POST["nome"]).", ".sqler($_POST["cognome"]).", ".sqler($_POST["cf"]).",
-                    ".sqler($_POST["piva"]).", ".sqler($_POST["via"]).", ".sqler($_POST["nCivico"]).", ".sqler($_POST["cap"]).", ".sqler($_POST["citta"]).", ".sqler($_POST["provincia"])."
-            FROM DUAL
-            WHERE NOT EXISTS (SELECT idControp FROM controparti WHERE pIva = \"".$_POST["piva"]."\" OR codFisc = \"".$_POST["cf"]."\" OR ragSocControp = \"".$_POST["ragsoc"]."\" OR nomeControp = \"".$_POST["nome"]."\" OR cognControp = \"".$_POST["cognome"]."\");
+    $sql = "
+	 CALL aggiornaAnag(".sqler($_POST["piva"]).", ".sqler($_POST["cf"]).", ".sqler($_POST["ragsoc"]).", ".sqler($_POST["nome"]).", ".sqler($_POST["cognome"]).", ".sqler($_POST["persFis"]).", ".sqler($_POST["via"]).", ".sqler($_POST["nCivico"]).", ".sqler($_POST["cap"]).", ".sqler($_POST["citta"]).", ".sqler($_POST["provincia"]).");
             UPDATE fatture
             SET totFatt = ".sqler($_POST["totFatt"]).",
             nFatt = ".sqler($_POST["ndoc"]).",
@@ -888,7 +876,6 @@ error_reporting(E_ALL);
     header("location: /acquistiincloud/docs.php");
   }
 
-<<<<<<< HEAD
   function retrieveAnagraficaFromPIVA() {
     // Create connection
     $conn = new mysqli(servername, username, password, dbname);
@@ -924,7 +911,67 @@ error_reporting(E_ALL);
       }
     }
   }
-=======
+
+function getAnagraficaFromPIVA() {
+	// Create connection
+    $conn = new mysqli(servername, username, password, dbname);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $sql = "SELECT * FROM controparti WHERE pIva = \"".$_GET["piva"]."\"";
+    error_log($sql);
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+      // output data of each row
+      while($row = $result->fetch_assoc()) {
+			$anagrafica = new \stdClass();
+			$anagrafica->cf = $row["codFisc"];
+			$anagrafica->pIva = $row["pIva"];
+			$anagrafica->nome = $row["nomeControp"];
+			$anagrafica->cognome = $row["cognControp"];
+			$anagrafica->ragSoc = $row["ragSocControp"];
+			$anagrafica->via = $row["via"];
+			$anagrafica->nCivico = $row["nCivico"];
+			$anagrafica->CAP = $row["CAP"];
+			$anagrafica->citta = $row["citta"];
+			$anagrafica->provincia = $row["prov"];
+			$JSON = json_encode($anagrafica);
+        print($JSON);
+      }
+    }
+}
+
+function getAnagraficaFromCF() {
+	// Create connection
+    $conn = new mysqli(servername, username, password, dbname);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $sql = "SELECT * FROM controparti WHERE codFisc = \"".$_GET["cf"]."\"";
+    error_log($sql);
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+      // output data of each row
+      while($row = $result->fetch_assoc()) {
+			$anagrafica = new \stdClass();
+			$anagrafica->cf = $row["codFisc"];
+			$anagrafica->pIva = $row["pIva"];
+			$anagrafica->nome = $row["nomeControp"];
+			$anagrafica->cognome = $row["cognControp"];
+			$anagrafica->ragSoc = $row["ragSocControp"];
+			$anagrafica->via = $row["via"];
+			$anagrafica->nCivico = $row["nCivico"];
+			$anagrafica->CAP = $row["CAP"];
+			$anagrafica->citta = $row["citta"];
+			$anagrafica->provincia = $row["prov"];
+			$JSON = json_encode($anagrafica);
+        print($JSON);
+      }
+    }
+}
+
 function navbar() {
   print('
   <nav class="navbar navbar-expand-md navbar-dark bg-dark" style="margin-bottom: 20px;">
@@ -951,55 +998,4 @@ function navbar() {
   </nav>');
 }
 
-function footer(){
-  print('
-<!--Footer-->
-<footer class="page-footer font-small blue pt-4 mt-4">
-
-    <!--Footer Links-->
-    <div class="container-fluid text-center text-md-left">
-        <div class="row">
-
-            <!--First column-->
-            <div class="col-md-6">
-                <h5 class="text-uppercase">Footer Content</h5>
-                <p>Here you can use rows and columns here to organize your footer content.</p>
-            </div>
-            <!--/.First column-->
-
-            <!--Second column-->
-            <div class="col-md-6">
-                <h5 class="text-uppercase">Links</h5>
-                <ul class="list-unstyled">
-                    <li>
-                        <a href="#!">Link 1</a>
-                    </li>
-                    <li>
-                        <a href="#!">Link 2</a>
-                    </li>
-                    <li>
-                        <a href="#!">Link 3</a>
-                    </li>
-                    <li>
-                        <a href="#!">Link 4</a>
-                    </li>
-                </ul>
-            </div>
-            <!--/.Second column-->
-        </div>
-    </div>
-    <!--/.Footer Links-->
-
-    <!--Copyright-->
-    <div class="footer-copyright py-3 text-center">
-        © 2018 Copyright:
-        <a href="https://mdbootstrap.com/material-design-for-bootstrap/"> MDBootstrap.com </a>
-    </div>
-    <!--/.Copyright-->
->>>>>>> 5833f6b0efc02e7069fda8b7d981fc60fcf48872
-
-</footer>
-<!--/.Footer-->
-                      ');
-}
 ?>

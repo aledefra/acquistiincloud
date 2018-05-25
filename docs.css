@@ -326,7 +326,6 @@ tr:nth-child(even) {
   margin-top: 52px;
   height:100%;
   width: 100%;
-  position: fixed;
 }
 
 .div-pdffatt {
@@ -562,3 +561,4 @@ li {
     display: list-item;
     text-align: -webkit-match-parent;
 }
+                   
